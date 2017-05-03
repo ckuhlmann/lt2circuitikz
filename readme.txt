@@ -16,7 +16,7 @@ This translation process requires the following
 	     
 	lt2circuiTikz will use the component name and value from the .asc schematic, as well as the pin names and locations from the .asy symbol file and make this information available 
 	in the .asy2tex translation file.
-	Component names can be accessed using the #self.name# placeholder, #self.value# is replaced with the value. The value2 field can be used to specify additional options and becomes available using ##options## (not the two #).
+	Component names can be accessed using the #self.name# placeholder, #self.value# is replaced with the value. The value2 field can be used to specify additional options and becomes available using ##options## (note the two #).
 	The coordinates of component pins (translated into the latex dimensions) are accessed through #PinName:x1# for the x component and #PinName:y1# for the y component of a pin coordinate.
 	The origin of the symbol as specified by the schematic (again, translated into tex coordinates) is accessible through #self.texx1#, #self.texy1#.
 	
