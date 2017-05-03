@@ -2,7 +2,7 @@
 \documentclass[tikz,margin={2pt 2pt 2pt 2pt}]{standalone}
 \usepackage[compatibility,siunitx,  americanvoltages, americancurrents, europeanresistors, europeaninductors, americanports,%
   straightlabels, fetbodydiode]{circuitikz}
-\usepackage{tikz,amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen}
+\usepackage{tikz,amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen,ulem}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.14}
 \usetikzlibrary{shapes,arrows}
@@ -40,6 +40,10 @@
 %	/tikz/circuitikz/tripoles/op amp/height=0.5,%
 %	/tikz/circuitikz/tripoles/op amp/width=0.5,%
 }
+\pgfkeys{/lt2ti/netlabel/font/.initial= \small}
+\pgfkeys{/lt2ti/text/font/.initial= \small}
+\definecolor{netlabelcolor}{rgb}{0, 0, 0.25}
+\definecolor{lttotitextcolor}{rgb}{0, 0.4, 0.25}
 
 \begin{document}%
 	%\centering%

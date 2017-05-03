@@ -1,0 +1,10 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *netlabel
+BeginTex
+  \node (#self.value#) [] at (#self.texx1#,#self.texy1#) {};% text mark
+  \node (#self.value#txt) [##options## lttotitextcolor, right= -0.25cm of #self.value#, scale=0.5*#self.size#] {{\pgfkeysvalueof{/lt2ti/text/font}#self.textstr#}};
+EndTex

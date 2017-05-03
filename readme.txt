@@ -3,7 +3,7 @@ This is lt2circuitTikz.
 It reads the schematic files produced by LTspice (R) and converts them into a latex graphic using pgfplot,tikz and circuitikz.
 These graphics can then be compiled using pdflatex into pdf format.
 
-This translation process requires the following
+This translation process requires the following (in addition to python 3.5+)
 	1) an input *.asc schematic of version 4 (LTspice IV and XVII)
 	2) for every schematic component, the corresponding *.asy symbol file, copied to the sym32a subdirectory
 	     if the symbol is not in the LTspice library root folder, the symbol must be copied to a subfolder structure with the same relative path as the symbol file in the library directory.

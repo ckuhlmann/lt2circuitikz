@@ -1,0 +1,10 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *netlabel
+BeginTex
+  \node (#self.label#) [] at (#self.texx1#,#self.texy1#) {};% label mark
+  \node (#self.label#txt) [##options## netlabelcolor, above= -0.25cm of #self.label#] {{\pgfkeysvalueof{/lt2ti/netlabel/font}#self.labelstr#}};
+EndTex

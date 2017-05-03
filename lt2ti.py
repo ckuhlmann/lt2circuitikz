@@ -88,7 +88,6 @@ class lt2circuiTikz:
         self.circDict = CircuitDict();
         self.symbolDict = SymbolDict();
         self.validInputFile = False;
-        self.lastComponent = None;
         #self.lt2tscale = 1.0/32.0;
         #self.lt2tscale = (1.0/64.0);
         self.lt2tscale = (1.0/48.0);
@@ -412,6 +411,17 @@ class lt2circuiTikz:
             self.lastText = None;       
     
     def readASCFile(self, fielandpath):
+        
+        self.lastComponent = None;
+        self.lastSymbol = None;
+        self.lastAttributesDict = {};
+        self.lastLabel = None;
+        self.lastWire = None
+        self.lastPin = None;
+        self.circDict = CircuitDict();
+        self.symbolDict = SymbolDict();
+        self.lastText = None
+        
         self.linecnt = 0;
         try :
             fhs = open(fielandpath, mode='r', newline=None);
@@ -492,7 +502,28 @@ class lt2circuiTikz:
             c = Component(r'circuiTikz\\gnd', int(m.group(1)), int(m.group(2)), 0, False, 'GND'+str(self.linecnt), '')
             self._handleComponent_worker(c);
         else:
-            self.lastLabel = NetLabel(m.group(3), int(m.group(1)), int(m.group(2)));
+            lbl = NetLabel(m.group(3), int(m.group(1)), int(m.group(2)));
+            lbl.value = 'lbl'+str(self.linecnt)
+            
+            pathandctype = 'netlabel';
+            if not self.symbolDict.hasSymbolPath(pathandctype):
+                # not cached, try to load
+                fullpath = self.symfilebasepath + pathandctype.replace('\\\\','\\');
+                sym = self.readASYFile(fullpath+'.asy');
+                sym.path = '';
+                sym.ctype = pathandctype;
+                sym.pathandctype = pathandctype;
+                
+                tsym = self.readASY2TexFile(fullpath+'.asy2tex',sym);
+                if (tsym != None):
+                    self.symbolDict.addSymbol(tsym); # add symbol and translation information
+            else:
+                # already existing in cache
+                tsym = self.symbolDict.getSymbolByPath(pathandctype);
+                
+            lbl.symbol = tsym;            
+            
+            self.lastLabel = lbl;
         return;
     
     def _handleComponent(self, m):
@@ -626,10 +657,33 @@ class lt2circuiTikz:
     def _handleText(self, m): # attribute display position
         self._resetLast(); # no more attributes for previous lines
         # TEXT x1          y1       pos.str.    size?=2         string
-        self.lastText = SchText(m.group(5), int(m.group(1)), int(m.group(2)))
-        self.lastText.align = m.group(3);
-        self.lastText.size = float(m.group(4));
-        return;        
+        txt = SchText(m.group(5), int(m.group(1)), int(m.group(2)))
+        txt.align = m.group(3);
+        txt.size = float(m.group(4));
+        
+        txt.value = 'lbl'+str(self.linecnt)
+        
+        pathandctype = 'text';
+        if not self.symbolDict.hasSymbolPath(pathandctype):
+            # not cached, try to load
+            fullpath = self.symfilebasepath + pathandctype.replace('\\\\','\\');
+            sym = self.readASYFile(fullpath+'.asy');
+            sym.path = '';
+            sym.ctype = pathandctype;
+            sym.pathandctype = pathandctype;
+            
+            tsym = self.readASY2TexFile(fullpath+'.asy2tex',sym);
+            if (tsym != None):
+                self.symbolDict.addSymbol(tsym); # add symbol and translation information
+        else:
+            # already existing in cache
+            tsym = self.symbolDict.getSymbolByPath(pathandctype);
+            
+        txt.symbol = tsym;            
+        
+        self.lastText = txt;        
+        
+        return;
     
     def copyFileContents(self,source,destination):
         fhs = open(source, mode='r', newline='');
@@ -723,7 +777,8 @@ class lt2circuiTikz:
             for c, comp in compDict.items():
                 comp.circuitDict = self.circDict; # used for junction lookup etc.
                 comp.config = self.config; # allow config parameters in components to be used
-                texlines = comp.translateToLatex({});
+                
+                texlines = comp.translateToLatex({}); # ToDo: apply xoffset, yoffset (currently not in use)
                 
                 for tl in texlines:
                     tl = re.sub(r'[\r]*[\n]$', '', tl); # remove trailing line break since we add it after the comment.
@@ -733,16 +788,25 @@ class lt2circuiTikz:
         # output labels
         for pp, labeldict in self.circDict.coordLabelDict.items():
             for l, label in labeldict.items():
-                x1 = pp[0]*xscale+xoffset;
-                y1 = pp[1]*yscale+yoffset;
-                fhd.write(r'\node [draw] at ('+str(x1)+r','+str(y1)+r') {'+label.label+'};% label '+label.label+'\n');
+                label.circuitDict = self.circDict;
+                
+                texlines = label.translateToLatex({}); # ToDo: apply xoffset, yoffset (currently not in use)
+                
+                for tl in texlines:
+                    tl = re.sub(r'[\r]*[\n]$', '', tl); # remove trailing line break since we add it after the comment.
+                    fhd.write(tl+' % label "'+label.pathandctype+'" "'+label.label+'" '+label.value+' \n');
                 
         # output text
         for pp, txtdict in self.circDict.coordTextDict.items():
             for l, txt in txtdict.items():
-                x1 = pp[0]*xscale+xoffset;
-                y1 = pp[1]*yscale+yoffset;
-                fhd.write(r'\node [draw] at ('+str(x1)+r','+str(y1)+r') {'+txt.text+'};% text '+txt.text+'\n');
+                txt.circuitDict = self.circDict;
+                
+                texlines = txt.translateToLatex({}); # ToDo: apply xoffset, yoffset (currently not in use)
+                
+                for tl in texlines:
+                    tl = re.sub(r'[\r]*[\n]$', '', tl); # remove trailing line break since we add it after the comment.
+                    fhd.write(tl+' % text "'+txt.pathandctype+'" "'+txt.text+' '+txt.value+' " \n');                
+                
 
         if (self.includepreamble):
             self.copyFileContentsToHandle(self.scriptdir+os.sep+ self.symfilebasepath+'latex_closing.tex', fhd);
@@ -989,45 +1053,8 @@ class Attribute:
     
     def addOption(self, option):
         self.optionlist.append(option);
-    
 
-
-
-
-class SchText:
-    def __init__(self, text, x1, y1):
-        self.uuid = uuid.uuid4();
-        self.text = text;
-        self.x1 = x1;
-        self.y1 = y1;
-        self.size = 2;
-        self.align = "Left"
-        self.attrlist = [];
-        
-    def addAttribube(self, attrib):
-        self.attrlist.append(attrib);
-    
-    def getAttributes(self, attrib):
-        return self.attrlist;  
-    
-class NetLabel:
-    def __init__(self, label, x1, y1):
-        self.uuid = uuid.uuid4();
-        self.label = label;
-        self.x1 = x1;
-        self.y1 = y1;
-        self.attrlist = [];
-        
-    def addAttribute(self, attrib):
-        self.attrlist.append(attrib);
-    
-    def getAttributes(self, attrib):
-        return self.attrlist;    
-
-class Component:
-    uuid = None;
-    pinPosList = [];
-    pins = {};
+class SchObject:
     x1 = 0;
     y1 = 0;
     texx1 = 0;
@@ -1036,51 +1063,54 @@ class Component:
     texmirror = False;
     rotation = 0;
     mirror = False;
-    ctype = "undefined";
-    name = "undefined";
-    kind = "undefined";
-    value = "undefined";
     symbol = None;
-    path = '';
-    pathandctype = '';
-    value2 = ""
-    attrlist = [];
-    _rounddigits=5;
+    circuitDict = None;
+    value = 'UndefinedSchValue';
     
-    def __init__(self, ctype, x1, y1, rot, mirror, name, value):
-        self.ctype = ctype;
+    
+    def __init__(self, ctype, x1, y1):
         self.x1 = x1;
         self.y1 = y1;
+        self.uuid = uuid.uuid4();
         self.texx1 = 0;
         self.texy1 = 0;
-        self.rotation = rot;
-        self.mirror = (mirror==True);
+        self.texrot = 0;
+        self.texmirror = False;
+        self.rotation = 0;
+        self.mirror = False;
+        self.value = "undefinedSchValue";
         self.symbol = None;
-        self.circuitDict = None; # ref to parent circuit dict to determine junctions etc.
-        self.pathandctype = ctype;
-        re_ctype = re.compile(r'(.*\\\\)([a-zA-Z0-9_-]+)$', flags=re.IGNORECASE);
-        m = re_ctype.match(self.pathandctype);
-        if (m != None):
-            self.path = m.group(1);
-            self.path = self.path.replace('\\\\','\\');
-            self.ctype = m.group(2);
-        else:
-            self.path = '';
-            self.ctype = self.pathandctype;
+        self.circuitDict = None;
+        self.path = '';
+        self.pathandctype = '';
+        self.value2 = ''
+        self.attrlist = [];
+        self._rounddigits=5; 
         
-        
-        self.value = value;
-        self.value2 = '';
-
-        self.uuid = uuid.uuid4();
-        
-    def asString(self, indent=''):
-        res = indent+'component "'+self.pathandctype+'" ('+self.path+','+self.ctype+') named "'+self.name+'" with value "'+self.value+'" at '+str((self.x1,self.y1))+' rot'+str(self.rotation)+' mirrored='+str(self.mirror)+'.\n';
-        if (self.symbol != None):
-            res = res + indent+'    '+'component symbol:'+self.symbol.asString(indent+'    ');
-        return res;
     def print(self):
         print(self.asString())
+        
+    def _latexEscape(self, text):
+        """
+            :param text: a plain text message
+            :return: the message escaped to appear correctly in LaTeX
+        """
+        conv = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+            '<': r'\textless',
+            '>': r'\textgreater',
+        }
+        regex = re.compile('|'.join(re.escape((key)) for key in sorted(conv.keys(), key = lambda item: - len(item))))
+        return regex.sub(lambda match: conv[match.group()], text)        
         
     def _coord2tex(self, pp):
         xscale = 1.0 * self.symbol.lt2tscale;
@@ -1092,36 +1122,7 @@ class Component:
         pptex = (round(pp[0]*xscale+xoffset,self._rounddigits), round(pp[1]*yscale+yoffset, self._rounddigits))
         print('      new tex coord is '+str(pptex)+'.');
         
-        return pptex;
-    
-    def _pinIsJunction(self, match):
-        pinname = match.group(1);
-        
-        pin = self.symbol.latexPins.getPinByName(pinname);
-        if (pin == None):
-            pin = self.symbol.symbolPins.getPinByName(pinname);
-        if (pin == None):
-            print('Unable to find pin "'+pinname+'" of component '+self.pathandctype+' in either latex or asy pins. Using zero.');
-            pp = (0, 0);
-        else:
-            pp = pin.getP1Tuple();
-            
-        # get incident wire count at point
-        if (self.circuitDict == None):
-            print('Unable to lookup pin Junction for pin "'+pinname+'" of component '+self.pathandctype+' in either latex or asy pins. Using no juncion.');
-            return '';
-        
-        ppabs = self._coord2abs(pp);
-        
-        wdict = self.circuitDict.getWireDictAt(ppabs);
-        
-        cpindict = self.circuitDict.getPinDictAt(ppabs);
-        cpindict.pop(self.uuid, None) # remove our own pin at this position
-        
-        if ((len(wdict) + len(cpindict)) >= 2): # more than two pins / wires at this point: junction
-            return '*'
-        else:
-            return ''
+        return pptex;    
     
     def _coord2abs(self, coord):
         # preprocess
@@ -1157,7 +1158,160 @@ class Component:
         # convert to absolute
         ppabs = (pp[0] + self.x1,   pp[1] + self.y1); # move to absolute position according to our origin in absolute coordinates
         print('      new absolute coord is '+str(ppabs)+'.');
-        return ppabs;
+        return ppabs;    
+    
+    def _symcKVAttrStrToAttr(self, match):
+        attr = match.group(1);
+        res = self.symbol.conversionKV[attr]
+        return str(res);    
+    
+    def _attrStrToAttr(self, match):
+        attr = match.group(1);
+        res = getattr(self, attr);
+        return str(res);
+        
+    def _symAttrStrToAttr(self, match):
+        attr = match.group(1);
+        res = getattr(self.symbol, attr);
+        return str(res);    
+    
+    def addAttribute(self, attrib):
+        self.attrlist.append(attrib);
+    
+    def getAttributes(self, attrib):
+        return self.attrlist;
+    
+    def getP1Tuple(self):
+        return (self.x1, self.y1)
+    
+    def _mirrorReplace(self, line, opt):
+        mirror = self.mirror;
+        if (self.symbol.latexOriginMirror):
+            mirror = not mirror;        
+        if (self.symbol.symbolOriginMirror):
+            mirror = not mirror;        
+        if (mirror):
+            line = re.sub('##mirror_invert##','invert', line);
+            line = re.sub('##mirror_mirror##','mirror', line);
+            line = re.sub('##mirror_xscale##','xscale=-1', line);
+            line = re.sub('##mirror_xscale_value##','-1', line);
+            line = re.sub('##mirror_yscale##','yscale=-1', line);
+            line = re.sub('##mirror_yscale_value##','-1', line);
+            line = re.sub('##mirror##','invert', line); # for circuiTikz mirror means horizontal mirror, but we want vertical mirror, wich is invert in circuiTikz terminology
+            if (int((self.rotation/90)%2) == 0):
+                line = re.sub('##mirror_rot_xscale_value##','-1', line); # rotated mirror scaling
+                line = re.sub('##mirror_rot_yscale_value##','1', line); # rotated mirror scaling
+            else:
+                line = re.sub('##mirror_rot_xscale_value##','1', line); # normal mirror
+                line = re.sub('##mirror_rot_yscale_value##','-1', line); # normal mirror
+                
+        else:
+            line = re.sub('##mirror_invert##','', line);
+            line = re.sub('##mirror_mirror##','', line);
+            line = re.sub('##mirror_xscale##','', line);
+            line = re.sub('##mirror_xscale_value##','1', line);
+            line = re.sub('##mirror_yscale##','', line);
+            line = re.sub('##mirror_yscale_value##','1', line);
+            line = re.sub('##mirror##','', line); 
+            
+            line = re.sub('##mirror_rot_yscale_value##','1', line); # no mirror
+            line = re.sub('##mirror_rot_xscale_value##','1', line); # no mirror
+
+        rotatemirror = 1;
+        if (self.mirror):
+            rotatemirror = -1;
+        line = re.sub('##rotate_mirror##',str(round((-1)*self.rotation*rotatemirror+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);    
+        
+        return line;
+    
+    
+
+class Component(SchObject):
+    uuid = None;
+    pinPosList = [];
+    pins = {};
+    x1 = 0;
+    y1 = 0;
+    texx1 = 0;
+    texy1 = 0;
+    texrot = 0;
+    texmirror = False;
+    rotation = 0;
+    mirror = False;
+    ctype = "undefined";
+    name = "undefined";
+    kind = "undefined";
+    value = "undefined";
+    symbol = None;
+    path = '';
+    pathandctype = '';
+    value2 = ""
+    attrlist = [];
+    _rounddigits=5;
+    
+    def __init__(self, ctype, x1, y1, rot, mirror, name, value):
+        super().__init__(ctype,x1,y1);
+        self.ctype = ctype;
+        self.x1 = x1;
+        self.y1 = y1;
+        self.texx1 = 0;
+        self.texy1 = 0;
+        self.rotation = rot;
+        self.mirror = (mirror==True);
+        self.symbol = None;
+        self.circuitDict = None; # ref to parent circuit dict to determine junctions etc.
+        self.pathandctype = ctype;
+        re_ctype = re.compile(r'(.*\\\\)([a-zA-Z0-9_-]+)$', flags=re.IGNORECASE);
+        m = re_ctype.match(self.pathandctype);
+        if (m != None):
+            self.path = m.group(1);
+            self.path = self.path.replace('\\\\','\\');
+            self.ctype = m.group(2);
+        else:
+            self.path = '';
+            self.ctype = self.pathandctype;
+        
+        
+        self.value = value;
+        self.value2 = '';
+
+        self.uuid = uuid.uuid4();
+        
+    def asString(self, indent=''):
+        res = indent+'component "'+self.pathandctype+'" ('+self.path+','+self.ctype+') named "'+self.name+'" with value "'+self.value+'" at '+str((self.x1,self.y1))+' rot'+str(self.rotation)+' mirrored='+str(self.mirror)+'.\n';
+        if (self.symbol != None):
+            res = res + indent+'    '+'component symbol:'+self.symbol.asString(indent+'    ');
+        return res;
+
+    
+    def _pinIsJunction(self, match):
+        pinname = match.group(1);
+        
+        pin = self.symbol.latexPins.getPinByName(pinname);
+        if (pin == None):
+            pin = self.symbol.symbolPins.getPinByName(pinname);
+        if (pin == None):
+            print('Unable to find pin "'+pinname+'" of component '+self.pathandctype+' in either latex or asy pins. Using zero.');
+            pp = (0, 0);
+        else:
+            pp = pin.getP1Tuple();
+            
+        # get incident wire count at point
+        if (self.circuitDict == None):
+            print('Unable to lookup pin Junction for pin "'+pinname+'" of component '+self.pathandctype+' in either latex or asy pins. Using no juncion.');
+            return '';
+        
+        ppabs = self._coord2abs(pp);
+        
+        wdict = self.circuitDict.getWireDictAt(ppabs);
+        
+        cpindict = self.circuitDict.getPinDictAt(ppabs);
+        cpindict.pop(self.uuid, None) # remove our own pin at this position
+        
+        if ((len(wdict) + len(cpindict)) >= 2): # more than two pins / wires at this point: junction
+            return '*'
+        else:
+            return ''
     
     def getAbsolutePinPos(self, aPin):
         pp = aPin.getP1Tuple();
@@ -1205,24 +1359,12 @@ class Component:
         
         return res;
     
-    def _attrStrToAttr(self, match):
-        attr = match.group(1);
-        res = getattr(self, attr);
-        return str(res);
-        
-    def _symAttrStrToAttr(self, match):
-        attr = match.group(1);
-        res = getattr(self.symbol, attr);
-        return str(res);
-    
     def _confAttrStrToAttr(self, match):
         attr = match.group(1);
-        res = self.config.get('component',attr)
-        return str(res);
-    
-    def _symcKVAttrStrToAttr(self, match):
-        attr = match.group(1);
-        res = self.symbol.conversionKV[attr]
+        if (self.config.has_option('component',attr)):
+            res = self.config.get('component',attr)
+        else:
+            res = '';
         return str(res);
     
     def _toLatexReplace(self, line, opt):
@@ -1247,42 +1389,8 @@ class Component:
         
         line = re.sub('##rotate##',str(round((-1)*self.rotation+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);
         
-        mirror = self.mirror;
-        if (self.symbol.latexOriginMirror):
-            mirror = not mirror;        
-        if (self.symbol.symbolOriginMirror):
-            mirror = not mirror;        
-        if (mirror):
-            line = re.sub('##mirror_invert##','invert', line);
-            line = re.sub('##mirror_mirror##','mirror', line);
-            line = re.sub('##mirror_xscale##','xscale=-1', line);
-            line = re.sub('##mirror_xscale_value##','-1', line);
-            line = re.sub('##mirror_yscale##','yscale=-1', line);
-            line = re.sub('##mirror_yscale_value##','-1', line);
-            line = re.sub('##mirror##','invert', line); # for circuiTikz mirror means horizontal mirror, but we want vertical mirror, wich is invert in circuiTikz terminology
-            if (int((self.rotation/90)%2) == 0):
-                line = re.sub('##mirror_rot_xscale_value##','-1', line); # rotated mirror scaling
-                line = re.sub('##mirror_rot_yscale_value##','1', line); # rotated mirror scaling
-            else:
-                line = re.sub('##mirror_rot_xscale_value##','1', line); # normal mirror
-                line = re.sub('##mirror_rot_yscale_value##','-1', line); # normal mirror
-                
-        else:
-            line = re.sub('##mirror_invert##','', line);
-            line = re.sub('##mirror_mirror##','', line);
-            line = re.sub('##mirror_xscale##','', line);
-            line = re.sub('##mirror_xscale_value##','1', line);
-            line = re.sub('##mirror_yscale##','', line);
-            line = re.sub('##mirror_yscale_value##','1', line);
-            line = re.sub('##mirror##','', line); 
-            
-            line = re.sub('##mirror_rot_yscale_value##','1', line); # no mirror
-            line = re.sub('##mirror_rot_xscale_value##','1', line); # no mirror
-        
-        rotatemirror = 1;
-        if (self.mirror):
-            rotatemirror = -1;
-        line = re.sub('##rotate_mirror##',str(round((-1)*self.rotation*rotatemirror+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);
+
+        line = self._mirrorReplace(line, opt)
         
         
         print('Converted tex line "'+line1.replace('\n','')+'"\n'+
@@ -1322,15 +1430,7 @@ class Component:
         self.symbol = copy.deepcopy(aSymbolProto);
         
         # modify the symbol according to our properties
-    
-    def addAttribute(self, attrib):
-        self.attrlist.append(attrib);
-    
-    def getAttributes(self, attrib):
-        return self.attrlist;
-    
-    def getP1Tuple(self):
-        return (self.x1, self.y1)
+
     
     def getPinList(self):
         return list(self.symbol.symbolPins.values());
@@ -1346,6 +1446,136 @@ class Component:
     
     def getPinPosList(self):
         return self.pinPosList;
+    
+    
+    
+class SchText(SchObject):
+    def __init__(self, text, x1, y1):
+        super().__init__('schtext', x1, y1);
+        self.uuid = uuid.uuid4();
+        self.text = text;
+        self.x1 = x1;
+        self.y1 = y1;
+        self.size = 2;
+        self.align = "Left"
+        self.attrlist = [];
+        self.symbol = None;
+        
+    def _toLatexReplace(self, line, opt):
+        # pattern, repl, string)
+        line1 = line;
+        
+        line = re.sub('#self.symbol.([A-Za-z0-9_\-!]+)#',self._symAttrStrToAttr, line);
+        
+        line = re.sub('#self.symbol.conversionKV.([A-Za-z0-9_\-!]+)#',self._symcKVAttrStrToAttr, line);
+        
+        line = re.sub('#self.textstr#',self._latexEscape(self.text), line);
+        
+        line = re.sub('#self.([A-Za-z0-9_\-!]+)#',self._attrStrToAttr, line);
+        
+        line = re.sub('##options##',self.symbol.value2, line);
+        
+        line = re.sub('##rotate##',str(round((-1)*self.rotation+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);
+        
+        line = self._mirrorReplace(line, opt);
+        
+        print('Converted tex line "'+line1.replace('\n','')+'"\n'+
+              ' to                "'+line.replace('\n','')+'"');
+        
+        return line;
+        
+    def translateToLatex(self, opt):
+        if (opt == None):
+            opt = {};
+        
+        p1 = (0,0);
+        p1 = (p1[0] + self.symbol.symbolOriginX1, p1[1]+ self.symbol.symbolOriginY1);
+        
+        p1 = self._coord2abs(p1); # rotate and mirror origin offset
+        
+        lp= self._coord2tex(p1)
+        
+        self.texx1 = lp[0];
+        self.texy1 = lp[1];
+        
+        self.texrot = self.rotation + (-1)*self.symbol.symbolOriginRot;
+        self.texmirror = (self.mirror != self.symbol.symbolOriginMirror);
+            
+        print('Placing text  '+self.pathandctype+' textcontent "'+self._latexEscape(self.text)+'" valued "'+self.value+'" at spice coord '+str(self.getP1Tuple())+', '+('M' if self.mirror else 'R')+str(self.rotation)+' -> tex '+str(self._coord2tex(self.getP1Tuple()))+'. ')
+            
+        translated = [];
+            
+        if (self.symbol != None):
+            for line in self.symbol.latexTemplate:
+                translated.append(self._toLatexReplace(line, opt));
+            
+        return translated;    
+        
+
+    
+class NetLabel(SchObject):
+    def __init__(self, label, x1, y1):
+        super().__init__('netlabel', x1, y1);
+        self.uuid = uuid.uuid4();
+        self.label = label;
+        self.x1 = x1;
+        self.y1 = y1;
+        self.attrlist = [];
+        self.symbol = None;
+        
+    def _toLatexReplace(self, line, opt):
+        # pattern, repl, string)
+        line1 = line;
+        
+        line = re.sub('#self.symbol.([A-Za-z0-9_\-!]+)#',self._symAttrStrToAttr, line);
+        
+        line = re.sub('#self.symbol.conversionKV.([A-Za-z0-9_\-!]+)#',self._symcKVAttrStrToAttr, line);
+        
+        line = re.sub('#self.labelstr#',self._latexEscape(self.label), line);
+        
+        
+        
+        line = re.sub('#self.([A-Za-z0-9_\-!]+)#',self._attrStrToAttr, line);
+        
+        line = re.sub('##options##',self.symbol.value2, line);
+        
+        line = re.sub('##rotate##',str(round((-1)*self.rotation+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);
+        
+        line = self._mirrorReplace(line, opt);
+        
+        
+        print('Converted tex line "'+line1.replace('\n','')+'"\n'+
+              ' to                "'+line.replace('\n','')+'"');
+        
+        return line;
+        
+    def translateToLatex(self, opt):
+        if (opt == None):
+            opt = {};
+        
+        p1 = (0,0);
+        p1 = (p1[0] + self.symbol.symbolOriginX1, p1[1]+ self.symbol.symbolOriginY1);
+        
+        p1 = self._coord2abs(p1); # rotate and mirror origin offset
+        
+        lp= self._coord2tex(p1)
+        
+        self.texx1 = lp[0];
+        self.texy1 = lp[1];
+        
+        self.texrot = self.rotation + (-1)*self.symbol.symbolOriginRot;
+        self.texmirror = (self.mirror != self.symbol.symbolOriginMirror);
+            
+        print('Placing label  '+self.pathandctype+' named "'+self._latexEscape(self.label)+'" valued "'+self.value+'" at spice coord '+str(self.getP1Tuple())+', '+('M' if self.mirror else 'R')+str(self.rotation)+' -> tex '+str(self._coord2tex(self.getP1Tuple()))+'. ')
+            
+        translated = [];
+            
+        if (self.symbol != None):
+            for line in self.symbol.latexTemplate:
+                translated.append(self._toLatexReplace(line, opt));
+            
+        return translated;    
+    
     
 
 class Wire:
