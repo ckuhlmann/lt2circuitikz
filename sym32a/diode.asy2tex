@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *diode
+BeginTex
+  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l^=#self.name#, a_=#self.value#, ##options##] (#-:x1#,#-:y1#){};
+EndTex

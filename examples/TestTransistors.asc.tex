@@ -1,0 +1,229 @@
+% automatically generated document using lt2circuiTikz
+\documentclass[tikz,margin={2pt 2pt 2pt 2pt}]{standalone}
+\usepackage[compatibility,siunitx,  americanvoltages, americancurrents, europeanresistors, europeaninductors, americanports,%
+  straightlabels, fetbodydiode]{circuitikz}
+\usepackage{tikz,amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usetikzlibrary{shapes,arrows}
+\usepackage{agaramondc}					% Adobe Garamond, custom shape
+\renewcommand{\shapedefault}{rtl} % rtl: roman tabular lining
+
+
+\usetikzlibrary{backgrounds,calc,positioning}
+%\draw (0,0) node[<CompName>,<Options,optional>] (<AnchorName,optional>) {<TextAtAnchor,optional>}; % curly brackets are mandatory, even if empty!
+%\draw (<x1>,<y1>) to[<CompName>,<Options,optional>] (<x2>,<y2>);
+\usetikzlibrary{circuits.ee.IEC}
+
+
+% sym32a style
+
+\ctikzset{tripoles/mos style/arrows}
+\ctikzset{
+	%/tikz/circuitikz/bipoles/length=1.2cm,%1.4cm
+	%/tikz/circuitikz/tripoles/pigfetd/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pigfetd/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/nigfetd/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/nigfetd/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/nigfete/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/nigfete/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/pigfete/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pigfete/width=0.8674, %0.7
+	%%	%
+	%/tikz/circuitikz/tripoles/npn/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/npn/width=0.7435, %0.6
+	%/tikz/circuitikz/tripoles/pnp/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pnp/width==0.7435, %0.6
+	/tikz/circuitikz/bipoles/diode/height=0.375,%
+	/tikz/circuitikz/bipoles/diode/width=0.375,%
+	/tikz/circuitikz/tripoles/op amp/height=0.952,%
+	/tikz/circuitikz/tripoles/op amp/width=1.2,%
+	/tikz/circuitikz/tripoles/op amp/font=\footnotesize,
+}
+
+\begin{document}%
+	%\centering%
+	\begin{tikzpicture}[circuit ee IEC, scale=0.6666666667]%
+	%\tikzstyle{every node}=[font=\small];%
+	%\node [draw] at (0.0,0.0) {\pgfkeysvalueof{/tikz/circuitikz/tripoles/op amp/font}};
+\draw (6.0,-3.5)to[*short,-] (6.0,-1.5);% wire w3
+\draw (10.0,-3.5)to[*short,-] (10.0,-1.5);% wire w4
+\draw (15.0,-3.5)to[*short,-] (15.0,-1.5);% wire w5
+\draw (21.0,-3.5)to[*short,-] (21.0,-1.5);% wire w6
+\draw (19.5,-4.0)to[*short,-] (18.0,-4.0);% wire w7
+\draw (4.5,-4.5)to[*short,-] (3.5,-4.5);% wire w8
+\draw (8.5,-4.5)to[*short,-] (7.5,-4.5);% wire w9
+\draw (57.0,-4.5)to[*short,-] (57.0,-2.5);% wire w10
+\draw (63.0,-4.5)to[*short,-] (63.0,-2.5);% wire w11
+\draw (68.0,-4.5)to[*short,-] (68.0,-2.5);% wire w12
+\draw (72.0,-4.5)to[*short,-] (72.0,-2.5);% wire w13
+\draw (13.5,-5.0)to[*short,-] (12.5,-5.0);% wire w14
+\draw (60.0,-5.0)to[*short,-] (58.5,-5.0);% wire w15
+\draw (70.5,-5.5)to[*short,-] (69.5,-5.5);% wire w16
+\draw (74.5,-5.5)to[*short,-] (73.5,-5.5);% wire w17
+\draw (65.5,-6.0)to[*short,-] (64.5,-6.0);% wire w18
+\draw (6.0,-8.0)to[*short,-] (6.0,-5.5);% wire w19
+\draw (10.0,-8.0)to[*short,-] (10.0,-5.5);% wire w20
+\draw (15.0,-8.0)to[*short,-] (15.0,-5.5);% wire w21
+\draw (21.0,-8.0)to[*short,-] (21.0,-5.5);% wire w22
+\draw (57.0,-9.0)to[*short,-] (57.0,-6.5);% wire w23
+\draw (63.0,-9.0)to[*short,-] (63.0,-6.5);% wire w24
+\draw (68.0,-9.0)to[*short,-] (68.0,-6.5);% wire w25
+\draw (72.0,-9.0)to[*short,-] (72.0,-6.5);% wire w26
+\draw (6.0,-10.5)to[*short,-] (6.0,-8.5);% wire w27
+\draw (15.0,-10.5)to[*short,-] (15.0,-8.5);% wire w28
+\draw (31.0,-10.5)to[*short,-] (31.0,-9.5);% wire w29
+\draw (50.0,-10.5)to[*short,-] (50.0,-9.5);% wire w30
+\draw (-6.5,-12.0)to[*short,-] (-8.5,-12.0);% wire w31
+\draw (-2.0,-12.0)to[*short,-] (-4.5,-12.0);% wire w32
+\draw (4.0,-12.0)to[*short,-] (1.5,-12.0);% wire w33
+\draw (13.0,-12.0)to[*short,-] (10.0,-12.0);% wire w34
+\draw (30.0,-12.0)to[*short,-] (27.5,-12.0);% wire w35
+\draw (34.0,-12.0)to[*short,-] (32.0,-12.0);% wire w36
+\draw (49.0,-12.0)to[*short,-] (47.0,-12.0);% wire w37
+\draw (53.5,-12.0)to[*short,-] (51.0,-12.0);% wire w38
+\draw (78.0,-12.0)to[*short,-] (75.5,-12.0);% wire w39
+\draw (82.0,-12.0)to[*short,-] (80.0,-12.0);% wire w40
+\draw (31.0,-14.5)to[*short,-] (31.0,-13.5);% wire w41
+\draw (50.0,-14.5)to[*short,-] (50.0,-13.5);% wire w42
+\draw (-6.0,-15.0)to[*short,-] (-6.0,-13.5);% wire w43
+\draw (79.5,-15.0)to[*short,-] (79.5,-13.5);% wire w44
+\draw (30.0,-16.0)to[*short,-] (27.5,-16.0);% wire w45
+\draw (34.0,-16.0)to[*short,-] (32.0,-16.0);% wire w46
+\draw (49.0,-16.0)to[*short,-] (47.0,-16.0);% wire w47
+\draw (53.5,-16.0)to[*short,-] (51.0,-16.0);% wire w48
+\draw (6.0,-16.5)to[*short,-] (6.0,-13.5);% wire w49
+\draw (15.0,-16.5)to[*short,-] (15.0,-13.5);% wire w50
+\draw (13.5,-17.0)to[*short,-] (10.0,-17.0);% wire w51
+\draw (-6.5,-18.0)to[*short,-] (-8.5,-18.0);% wire w52
+\draw (-2.0,-18.0)to[*short,-] (-4.5,-18.0);% wire w53
+\draw (78.0,-18.0)to[*short,-] (75.5,-18.0);% wire w54
+\draw (82.0,-18.0)to[*short,-] (80.0,-18.0);% wire w55
+\draw (4.5,-19.0)to[*short,-] (1.5,-19.0);% wire w56
+\draw (30.5,-19.5)to[*short,-] (30.5,-18.5);% wire w57
+\draw (50.5,-19.5)to[*short,-] (50.5,-18.5);% wire w58
+\draw (-5.0,-20.5)to[*short,-] (-5.0,-19.5);% wire w59
+\draw (78.5,-20.5)to[*short,-] (78.5,-19.5);% wire w60
+\draw (30.0,-21.0)to[*short,-] (27.5,-21.0);% wire w61
+\draw (34.0,-21.0)to[*short,-] (32.0,-21.0);% wire w62
+\draw (49.0,-21.0)to[*short,-] (47.0,-21.0);% wire w63
+\draw (53.5,-21.0)to[*short,-] (51.0,-21.0);% wire w64
+\draw (15.0,-22.0)to[*short,-] (15.0,-19.5);% wire w65
+\draw (-6.5,-23.0)to[*short,-] (-8.5,-23.0);% wire w66
+\draw (-2.0,-23.0)to[*short,-] (-4.5,-23.0);% wire w67
+\draw (78.0,-23.0)to[*short,-] (75.5,-23.0);% wire w68
+\draw (82.0,-23.0)to[*short,-] (80.0,-23.0);% wire w69
+\draw (6.0,-23.5)to[*short,-] (6.0,-19.5);% wire w70
+\draw (-5.5,-25.5)to[*short,-] (-5.5,-24.5);% wire w71
+\draw (31.5,-25.5)to[*short,-] (31.5,-24.0);% wire w72
+\draw (49.5,-25.5)to[*short,-] (49.5,-24.0);% wire w73
+\draw (79.0,-25.5)to[*short,-] (79.0,-24.5);% wire w74
+\draw (-6.5,-27.0)to[*short,-] (-8.5,-27.0);% wire w75
+\draw (-2.0,-27.0)to[*short,-] (-4.5,-27.0);% wire w76
+\draw (30.0,-27.0)to[*short,-] (27.5,-27.0);% wire w77
+\draw (34.0,-27.0)to[*short,-] (32.0,-27.0);% wire w78
+\draw (49.0,-27.0)to[*short,-] (47.0,-27.0);% wire w79
+\draw (53.5,-27.0)to[*short,-] (51.0,-27.0);% wire w80
+\draw (78.0,-27.0)to[*short,-] (75.5,-27.0);% wire w81
+\draw (82.0,-27.0)to[*short,-] (80.0,-27.0);% wire w82
+\draw (-5.5,-29.5)to[*short,-] (-5.5,-28.5);% wire w83
+\draw (79.0,-29.5)to[*short,-] (79.0,-28.5);% wire w84
+\draw (57.0,-30.5)to[*short,-] (57.0,-28.0);% wire w85
+\draw (61.0,-30.5)to[*short,-] (61.0,-28.0);% wire w86
+\draw (66.0,-30.5)to[*short,-] (66.0,-28.0);% wire w87
+\draw (72.0,-30.5)to[*short,-] (72.0,-28.0);% wire w88
+\draw (64.5,-31.0)to[*short,-] (63.5,-31.0);% wire w89
+\draw (55.5,-31.5)to[*short,-] (54.5,-31.5);% wire w90
+\draw (59.5,-31.5)to[*short,-] (58.5,-31.5);% wire w91
+\draw (70.5,-32.0)to[*short,-] (69.0,-32.0);% wire w92
+\draw (6.5,-33.5)to[*short,-] (6.5,-31.0);% wire w93
+\draw (12.5,-33.5)to[*short,-] (12.5,-31.0);% wire w94
+\draw (17.5,-33.5)to[*short,-] (17.5,-31.0);% wire w95
+\draw (21.5,-33.5)to[*short,-] (21.5,-31.0);% wire w96
+\draw (15.0,-34.0)to[*short,-] (14.0,-34.0);% wire w97
+\draw (20.0,-34.5)to[*short,-] (19.0,-34.5);% wire w98
+\draw (24.0,-34.5)to[*short,-] (23.0,-34.5);% wire w99
+\draw (57.0,-34.5)to[*short,-] (57.0,-32.5);% wire w100
+\draw (61.0,-34.5)to[*short,-] (61.0,-32.5);% wire w101
+\draw (66.0,-34.5)to[*short,-] (66.0,-32.5);% wire w102
+\draw (72.0,-34.5)to[*short,-] (72.0,-32.5);% wire w103
+\draw (9.5,-35.0)to[*short,-] (8.0,-35.0);% wire w104
+\draw (6.5,-37.5)to[*short,-] (6.5,-35.5);% wire w105
+\draw (12.5,-37.5)to[*short,-] (12.5,-35.5);% wire w106
+\draw (17.5,-37.5)to[*short,-] (17.5,-35.5);% wire w107
+\draw (21.5,-37.5)to[*short,-] (21.5,-35.5);% wire w108
+ \draw (6.0, -12.0) node[npn, nobodydiode, , rotate=0, ] (Q3) {}   (Q3)++(1.0,1) node {Q3 }; % component "npn" "Q3" 
+ \draw (4.0, -12.0) to [*short, -] (Q3.B); \draw (6.0, -13.5) to [*short, -] (Q3.E); \draw (6.0, -10.5) to [*short, -] (Q3.C);% extend wires to the connection points   % component "npn" "Q3" 
+ \draw (15.0, -4.59687) node[nigfete, , yscale=1, rotate=0, ] (M1) {}   (M1)++(1.2,1) node {M1 }; % component "circuiTikz\\nmos_t" "M1" 
+ \draw (13.5, -5.0) to [*short, -] (M1.G); \draw (15.0, -3.5) to [*short, -] (M1.D); \draw (15.0, -5.5) to [*short, -] (M1.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M1" 
+ \draw (6.0, -4.5) node[npn, nobodydiode, , rotate=0, ] (Q1) {}   (Q1)++(1.0,1) node {Q1 }; % component "circuiTikz\\npn_t" "Q1" 
+ \draw (4.5, -4.5) to [*short, -] (Q1.B); \draw (6.0, -5.5) to [*short, -] (Q1.E); \draw (6.0, -3.5) to [*short, -] (Q1.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q1" 
+ \draw (10.0, -4.5) node[pnp, nobodydiode, , rotate=0, ] (Q2) {}   (Q2)++(1.0,1) node {Q2 }; % component "circuiTikz\\pnp_t" "Q2" 
+ \draw (8.5, -4.5) to [*short, -] (Q2.B); \draw (10.0, -3.5) to [*short, -] (Q2.E); \draw (10.0, -5.5) to [*short, -] (Q2.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q2" 
+ \draw (21.0, -4.40313) node[pigfete, , yscale=1, rotate=0, ] (M2) {}   (M2)++(1.2,1) node {M2 }; % component "circuiTikz\\pmos_t" "M2" 
+ \draw (19.5, -4.0) to [*short, -] (M2.G); \draw (21.0, -5.5) to [*short, -] (M2.D); \draw (21.0, -3.5) to [*short, -] (M2.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M2" 
+ \draw (15.0, -12.0) node[pnp, nobodydiode, xscale=1, yscale=1, rotate=0, ] (Q5) {}   (Q5)++(1.0,1) node {Q5 }; % component "pnp" "Q5" 
+ \draw (13.0, -12.0) to [*short, -] (Q5.B); \draw (15.0, -10.5) to [*short, -] (Q5.E); \draw (15.0, -13.5) to [*short, -] (Q5.C);% extend wires to the connection points   % component "pnp" "Q5" 
+ \draw (6.0, -18.59375) node[nigfete, , rotate=0, ] (M4) {}   (M4)++(1.2,1) node {M4 }; % component "nmos" "M4" 
+ \draw (4.5, -19.0) to [*short, -] (M4.G); \draw (6.0, -16.5) to [*short, -] (M4.D); \draw (6.0, -19.5) to [*short, -] (M4.S);% extend wires to the connection points   % component "nmos" "M4" 
+ \draw (15.0, -17.40625) node[pigfete, xscale=1, yscale=1, rotate=0, ] (M3) {}   (M3)++(1.2,1) node {M3 }; % component "pmos" "M3" 
+ \draw (13.5, -17.0) to [*short, -] (M3.G); \draw (15.0, -19.5) to [*short, -] (M3.D); \draw (15.0, -16.5) to [*short, -] (M3.S);% extend wires to the connection points   % component "pmos" "M3" 
+ \draw (30.90312, -21.0) node[nigfete, , yscale=1, rotate=-90, ] (M5) {}   (M5)++(1.2,1) node {M5 }; % component "circuiTikz\\nmos_t" "M5" 
+ \draw (30.5, -19.5) to [*short, -] (M5.G); \draw (32.0, -21.0) to [*short, -] (M5.D); \draw (30.0, -21.0) to [*short, -] (M5.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M5" 
+ \draw (31.0, -12.0) node[npn, nobodydiode, , rotate=-90, ] (Q4) {}   (Q4)++(1.0,1) node {Q4 }; % component "circuiTikz\\npn_t" "Q4" 
+ \draw (31.0, -10.5) to [*short, -] (Q4.B); \draw (30.0, -12.0) to [*short, -] (Q4.E); \draw (32.0, -12.0) to [*short, -] (Q4.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q4" 
+ \draw (31.0, -16.0) node[pnp, nobodydiode, , rotate=-90, ] (Q6) {}   (Q6)++(1.0,1) node {Q6 }; % component "circuiTikz\\pnp_t" "Q6" 
+ \draw (31.0, -14.5) to [*short, -] (Q6.B); \draw (32.0, -16.0) to [*short, -] (Q6.E); \draw (30.0, -16.0) to [*short, -] (Q6.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q6" 
+ \draw (31.09688, -27.0) node[pigfete, , yscale=1, rotate=-90, ] (M6) {}   (M6)++(1.2,1) node {M6 }; % component "circuiTikz\\pmos_t" "M6" 
+ \draw (31.5, -25.5) to [*short, -] (M6.G); \draw (30.0, -27.0) to [*short, -] (M6.D); \draw (32.0, -27.0) to [*short, -] (M6.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M6" 
+ \draw (-5.40313, -18.0) node[nigfete, , yscale=1, rotate=-270, ] (M7) {}   (M7)++(1.2,1) node {M7 }; % component "circuiTikz\\nmos_t" "M7" 
+ \draw (-5.0, -19.5) to [*short, -] (M7.G); \draw (-6.5, -18.0) to [*short, -] (M7.D); \draw (-4.5, -18.0) to [*short, -] (M7.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M7" 
+ \draw (-5.5, -27.0) node[npn, nobodydiode, , rotate=-270, ] (Q7) {}   (Q7)++(1.0,1) node {Q7 }; % component "circuiTikz\\npn_t" "Q7" 
+ \draw (-5.5, -28.5) to [*short, -] (Q7.B); \draw (-4.5, -27.0) to [*short, -] (Q7.E); \draw (-6.5, -27.0) to [*short, -] (Q7.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q7" 
+ \draw (-5.5, -23.0) node[pnp, nobodydiode, , rotate=-270, ] (Q8) {}   (Q8)++(1.0,1) node {Q8 }; % component "circuiTikz\\pnp_t" "Q8" 
+ \draw (-5.5, -24.5) to [*short, -] (Q8.B); \draw (-6.5, -23.0) to [*short, -] (Q8.E); \draw (-4.5, -23.0) to [*short, -] (Q8.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q8" 
+ \draw (-5.59687, -12.0) node[pigfete, , yscale=1, rotate=-270, ] (M8) {}   (M8)++(1.2,1) node {M8 }; % component "circuiTikz\\pmos_t" "M8" 
+ \draw (-6.0, -13.5) to [*short, -] (M8.G); \draw (-4.5, -12.0) to [*short, -] (M8.D); \draw (-6.5, -12.0) to [*short, -] (M8.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M8" 
+ \draw (12.5, -34.40313) node[nigfete, , yscale=1, rotate=-180, ] (M9) {}   (M9)++(1.2,1) node {M9 }; % component "circuiTikz\\nmos_t" "M9" 
+ \draw (14.0, -34.0) to [*short, -] (M9.G); \draw (12.5, -35.5) to [*short, -] (M9.D); \draw (12.5, -33.5) to [*short, -] (M9.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M9" 
+ \draw (21.5, -34.5) node[npn, nobodydiode, , rotate=-180, ] (Q9) {}   (Q9)++(1.0,1) node {Q9 }; % component "circuiTikz\\npn_t" "Q9" 
+ \draw (23.0, -34.5) to [*short, -] (Q9.B); \draw (21.5, -33.5) to [*short, -] (Q9.E); \draw (21.5, -35.5) to [*short, -] (Q9.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q9" 
+ \draw (17.5, -34.5) node[pnp, nobodydiode, , rotate=-180, ] (Q10) {}   (Q10)++(1.0,1) node {Q10 }; % component "circuiTikz\\pnp_t" "Q10" 
+ \draw (19.0, -34.5) to [*short, -] (Q10.B); \draw (17.5, -35.5) to [*short, -] (Q10.E); \draw (17.5, -33.5) to [*short, -] (Q10.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q10" 
+ \draw (6.5, -34.59687) node[pigfete, , yscale=1, rotate=-180, ] (M10) {}   (M10)++(1.2,1) node {M10 }; % component "circuiTikz\\pmos_t" "M10" 
+ \draw (8.0, -35.0) to [*short, -] (M10.G); \draw (6.5, -33.5) to [*short, -] (M10.D); \draw (6.5, -35.5) to [*short, -] (M10.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M10" 
+ \draw (63.0, -5.59687) node[nigfete, xscale=-1, yscale=1, rotate=0, ] (M11) {}   (M11)++(1.2,1) node {M11 }; % component "circuiTikz\\nmos_t" "M11" 
+ \draw (64.5, -6.0) to [*short, -] (M11.G); \draw (63.0, -4.5) to [*short, -] (M11.D); \draw (63.0, -6.5) to [*short, -] (M11.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M11" 
+ \draw (72.0, -5.5) node[npn, nobodydiode, xscale=-1, rotate=0, ] (Q11) {}   (Q11)++(1.0,1) node {Q11 }; % component "circuiTikz\\npn_t" "Q11" 
+ \draw (73.5, -5.5) to [*short, -] (Q11.B); \draw (72.0, -6.5) to [*short, -] (Q11.E); \draw (72.0, -4.5) to [*short, -] (Q11.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q11" 
+ \draw (68.0, -5.5) node[pnp, nobodydiode, xscale=-1, rotate=0, ] (Q12) {}   (Q12)++(1.0,1) node {Q12 }; % component "circuiTikz\\pnp_t" "Q12" 
+ \draw (69.5, -5.5) to [*short, -] (Q12.B); \draw (68.0, -4.5) to [*short, -] (Q12.E); \draw (68.0, -6.5) to [*short, -] (Q12.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q12" 
+ \draw (57.0, -5.40313) node[pigfete, xscale=-1, yscale=1, rotate=0, ] (M12) {}   (M12)++(1.2,1) node {M12 }; % component "circuiTikz\\pmos_t" "M12" 
+ \draw (58.5, -5.0) to [*short, -] (M12.G); \draw (57.0, -6.5) to [*short, -] (M12.D); \draw (57.0, -4.5) to [*short, -] (M12.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M12" 
+ \draw (78.90313, -18.0) node[nigfete, xscale=-1, yscale=1, rotate=-270, ] (M13) {}   (M13)++(1.2,1) node {M13 }; % component "circuiTikz\\nmos_t" "M13" 
+ \draw (78.5, -19.5) to [*short, -] (M13.G); \draw (80.0, -18.0) to [*short, -] (M13.D); \draw (78.0, -18.0) to [*short, -] (M13.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M13" 
+ \draw (79.0, -27.0) node[npn, nobodydiode, xscale=-1, rotate=-270, ] (Q13) {}   (Q13)++(1.0,1) node {Q13 }; % component "circuiTikz\\npn_t" "Q13" 
+ \draw (79.0, -28.5) to [*short, -] (Q13.B); \draw (78.0, -27.0) to [*short, -] (Q13.E); \draw (80.0, -27.0) to [*short, -] (Q13.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q13" 
+ \draw (79.0, -23.0) node[pnp, nobodydiode, xscale=-1, rotate=-270, ] (Q14) {}   (Q14)++(1.0,1) node {Q14 }; % component "circuiTikz\\pnp_t" "Q14" 
+ \draw (79.0, -24.5) to [*short, -] (Q14.B); \draw (80.0, -23.0) to [*short, -] (Q14.E); \draw (78.0, -23.0) to [*short, -] (Q14.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q14" 
+ \draw (79.09687, -12.0) node[pigfete, xscale=-1, yscale=1, rotate=-270, ] (M14) {}   (M14)++(1.2,1) node {M14 }; % component "circuiTikz\\pmos_t" "M14" 
+ \draw (79.5, -13.5) to [*short, -] (M14.G); \draw (78.0, -12.0) to [*short, -] (M14.D); \draw (80.0, -12.0) to [*short, -] (M14.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M14" 
+ \draw (66.0, -31.40312) node[nigfete, xscale=-1, yscale=1, rotate=-180, ] (M15) {}   (M15)++(1.2,1) node {M15 }; % component "circuiTikz\\nmos_t" "M15" 
+ \draw (64.5, -31.0) to [*short, -] (M15.G); \draw (66.0, -32.5) to [*short, -] (M15.D); \draw (66.0, -30.5) to [*short, -] (M15.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M15" 
+ \draw (57.0, -31.5) node[npn, nobodydiode, xscale=-1, rotate=-180, ] (Q15) {}   (Q15)++(1.0,1) node {Q15 }; % component "circuiTikz\\npn_t" "Q15" 
+ \draw (55.5, -31.5) to [*short, -] (Q15.B); \draw (57.0, -30.5) to [*short, -] (Q15.E); \draw (57.0, -32.5) to [*short, -] (Q15.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q15" 
+ \draw (61.0, -31.5) node[pnp, nobodydiode, xscale=-1, rotate=-180, ] (Q16) {}   (Q16)++(1.0,1) node {Q16 }; % component "circuiTikz\\pnp_t" "Q16" 
+ \draw (59.5, -31.5) to [*short, -] (Q16.B); \draw (61.0, -32.5) to [*short, -] (Q16.E); \draw (61.0, -30.5) to [*short, -] (Q16.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q16" 
+ \draw (72.0, -31.59688) node[pigfete, xscale=-1, yscale=1, rotate=-180, ] (M16) {}   (M16)++(1.2,1) node {M16 }; % component "circuiTikz\\pmos_t" "M16" 
+ \draw (70.5, -32.0) to [*short, -] (M16.G); \draw (72.0, -30.5) to [*short, -] (M16.D); \draw (72.0, -32.5) to [*short, -] (M16.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M16" 
+ \draw (50.09687, -21.0) node[nigfete, xscale=-1, yscale=1, rotate=-90, ] (M17) {}   (M17)++(1.2,1) node {M17 }; % component "circuiTikz\\nmos_t" "M17" 
+ \draw (50.5, -19.5) to [*short, -] (M17.G); \draw (49.0, -21.0) to [*short, -] (M17.D); \draw (51.0, -21.0) to [*short, -] (M17.S);% extend wires to the connection points   % component "circuiTikz\\nmos_t" "M17" 
+ \draw (50.0, -12.0) node[npn, nobodydiode, xscale=-1, rotate=-90, ] (Q17) {}   (Q17)++(1.0,1) node {Q17 }; % component "circuiTikz\\npn_t" "Q17" 
+ \draw (50.0, -10.5) to [*short, -] (Q17.B); \draw (51.0, -12.0) to [*short, -] (Q17.E); \draw (49.0, -12.0) to [*short, -] (Q17.C);% extend wires to the connection points   % component "circuiTikz\\npn_t" "Q17" 
+ \draw (50.0, -16.0) node[pnp, nobodydiode, xscale=-1, rotate=-90, ] (Q18) {}   (Q18)++(1.0,1) node {Q18 }; % component "circuiTikz\\pnp_t" "Q18" 
+ \draw (50.0, -14.5) to [*short, -] (Q18.B); \draw (49.0, -16.0) to [*short, -] (Q18.E); \draw (51.0, -16.0) to [*short, -] (Q18.C);% extend wires to the connection points   % component "circuiTikz\\pnp_t" "Q18" 
+ \draw (49.90313, -27.0) node[pigfete, xscale=-1, yscale=1, rotate=-90, ] (M18) {}   (M18)++(1.2,1) node {M18 }; % component "circuiTikz\\pmos_t" "M18" 
+ \draw (49.5, -25.5) to [*short, -] (M18.G); \draw (51.0, -27.0) to [*short, -] (M18.D); \draw (49.0, -27.0) to [*short, -] (M18.S);% extend wires to the connection points   % component "circuiTikz\\pmos_t" "M18" 
+
+	\end{tikzpicture}
+\end{document}

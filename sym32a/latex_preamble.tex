@@ -1,0 +1,48 @@
+% automatically generated document using lt2circuiTikz
+\documentclass[tikz,margin={2pt 2pt 2pt 2pt}]{standalone}
+\usepackage[compatibility,siunitx,  americanvoltages, americancurrents, europeanresistors, europeaninductors, americanports,%
+  straightlabels, fetbodydiode]{circuitikz}
+\usepackage{tikz,amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usetikzlibrary{shapes,arrows}
+\usepackage{agaramondc}					% Adobe Garamond, custom shape
+\renewcommand{\shapedefault}{rtl} % rtl: roman tabular lining
+
+
+\usetikzlibrary{backgrounds,calc,positioning}
+%\draw (0,0) node[<CompName>,<Options,optional>] (<AnchorName,optional>) {<TextAtAnchor,optional>}; % curly brackets are mandatory, even if empty!
+%\draw (<x1>,<y1>) to[<CompName>,<Options,optional>] (<x2>,<y2>);
+\usetikzlibrary{circuits.ee.IEC}
+
+
+% sym32a style
+
+\ctikzset{tripoles/mos style/arrows}
+\ctikzset{
+	%/tikz/circuitikz/bipoles/length=1.2cm,%1.4cm
+	%/tikz/circuitikz/tripoles/pigfetd/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pigfetd/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/nigfetd/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/nigfetd/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/nigfete/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/nigfete/width=0.8674, %0.7
+	%/tikz/circuitikz/tripoles/pigfete/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pigfete/width=0.8674, %0.7
+	%%	%
+	%/tikz/circuitikz/tripoles/npn/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/npn/width=0.7435, %0.6
+	%/tikz/circuitikz/tripoles/pnp/height=1.363,%1.1
+	%/tikz/circuitikz/tripoles/pnp/width==0.7435, %0.6
+	/tikz/circuitikz/bipoles/diode/height=0.375,%
+	/tikz/circuitikz/bipoles/diode/width=0.375,%
+	/tikz/circuitikz/tripoles/op amp/height=0.952,%
+	/tikz/circuitikz/tripoles/op amp/width=1.2,%
+	/tikz/circuitikz/tripoles/op amp/font=\footnotesize,
+}
+
+\begin{document}%
+	%\centering%
+	\begin{tikzpicture}[circuit ee IEC, scale=0.6666666667]%
+	%\tikzstyle{every node}=[font=\small];%
+	%\node [draw] at (0.0,0.0) {\pgfkeysvalueof{/tikz/circuitikz/tripoles/op amp/font}};

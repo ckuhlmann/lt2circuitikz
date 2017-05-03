@@ -1,0 +1,10 @@
+Type {Node|Bipole|Tripole|<N>pole}
+Origin <x1> <y1> <rot> <mirror>
+BeginPinList (optional: otherwise created from ASC pin locations
+PinNum x1 y1 rot length PinName
+EndPinList
+TexElementName op amp
+BeginTex
+ \draw (#PinName:x1#, #PinName:x2#) node[#self.symbol.latexElementName#, l=#self.name#, a=#self.value#,##mirror_xscale##, rotate=##rotate##, ##options##] (#self.name#) {#self.value#};
+ \draw (#PinName:x1#, #PinName:x2#) to[#self.symbol.latexElementName#, l=#self.name#, a=#self.value#,##mirror##,rotate=##rotate##,##options##] (#PinName2:x1#,#PinName2:y1#){};
+EndTex

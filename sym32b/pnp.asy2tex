@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 64 48 180 True
+BeginPinList
+EndPinList
+TexElementName pnp
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, nobodydiode, xscale=##mirror_rot_xscale_value##, yscale=##mirror_rot_yscale_value##, rotate=##rotate_mirror##, ##options##] (#self.name#) {}   (#self.name#)++(1.0,1) node {#self.name# #self.value#};
+ \draw (#B:x1#, #B:y1#) to [*short, -] (#self.name#.B); \draw (#E:x1#, #E:y1#) to [*short, -] (#self.name#.E); \draw (#C:x1#, #C:y1#) to [*short, -] (#self.name#.C);% extend wires to the connection points  
+EndTex

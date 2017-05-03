@@ -1,0 +1,47 @@
+% automatically generated document using lt2circuiTikz
+\documentclass[tikz,margin={2pt 2pt 2pt 2pt}]{standalone}
+\usepackage[compatibility,siunitx,  americanvoltages, americancurrents, europeanresistors, europeaninductors, americanports,%
+  straightlabels, fetbodydiode]{circuitikz}
+\usepackage{tikz,amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usetikzlibrary{shapes,arrows}
+\usepackage{agaramondc}					% Adobe Garamond, custom shape
+\renewcommand{\shapedefault}{rtl} % rtl: roman tabular lining
+
+\definecolor{pgforange}{rgb}{1,0.5,0}
+\definecolor{pgfimpedancemag}{rgb}{0.75,0,0.75}
+\definecolor{pgfimpedancereal}{rgb}{0.0,0.0,0.75}
+\definecolor{pgfimpedanceimag}{rgb}{0.75,0.0,0.0}
+\definecolor{pgfimpedancephase}{rgb}{0.0,0.75,0.0}
+
+\pgfplotsset{
+		tick label style = {font = {\fontsize{7pt}{10pt}\selectfont}},
+		label style = {font = {\fontsize{7pt}{10pt}\selectfont}},
+		legend style = {font = {\fontsize{6pt}{7pt}\selectfont}}, 
+		tick style={
+			%line cap=round,
+			line width=0.4pt,
+			color=black,
+			%major tick length=6pt,
+			%minor tick length=3pt,
+			%minor tick num=1
+		}, 
+	}
+\ctikzset{tripoles/mos style/arrows}
+\usetikzlibrary{backgrounds,calc,positioning}
+%\draw (0,0) node[<CompName>,<Options,optional>] (<AnchorName,optional>) {<TextAtAnchor,optional>}; % curly brackets are mandatory, even if empty!
+%\draw (<x1>,<y1>) to[<CompName>,<Options,optional>] (<x2>,<y2>);
+\usetikzlibrary{circuits.ee.IEC}
+
+\ctikzset{
+	/tikz/circuitikz/bipoles/diode/height=0.375,%
+	/tikz/circuitikz/bipoles/diode/width=0.375,%
+%	/tikz/circuitikz/tripoles/op amp/height=0.5,%
+%	/tikz/circuitikz/tripoles/op amp/width=0.5,%
+}
+
+\begin{document}%
+	%\centering%
+	\begin{tikzpicture}[circuit ee IEC]
+	%\tikzstyle{every node}=[font=\large];%
