@@ -99,12 +99,22 @@ class lt2circuiTikz:
         self.lt2tscale = (1.0/48.0);
         self.includepreamble = True;
         
-        self.scriptdir = (os.path.dirname(os.path.realpath(__file__)));
+        try:
+            approot2 = (os.path.dirname(os.path.realpath(__file__)));
+            approot = os.path.dirname(os.path.abspath(__file__))
+        except NameError:  # We are the main py2exe script, not a module
+            import sys
+            approot = os.path.dirname(os.path.abspath(sys.argv[0]))
+        
+        self.scriptdir = (approot);
         
         self.symfilebasepath = 'sym'+os.sep;
         
+        configfileloc = self.scriptdir+os.sep+'lt2ti.ini'
+        print('lt2ti: Loading config at "'+configfileloc+'"')
+        
         self.config = configparser.RawConfigParser()
-        self.config.read(self.scriptdir+os.sep+'lt2ti.ini')
+        self.config.read(configfileloc)
         
         if (self.config.has_option('general', 'symdir')):
             self.symfilebasepath = self.config.get('general', 'symdir') + os.sep;
@@ -119,6 +129,8 @@ class lt2circuiTikz:
         if (self.config.has_option('general', 'includepreamble')):
             includepreamble = self.config.get('general', 'includepreamble');
             self.includepreamble = ((str(includepreamble).lower() == 'true') or ((includepreamble) == '1'))
+            
+        print('lt2ti ready for conversion.')
 
     
 
@@ -144,6 +156,7 @@ class lt2circuiTikz:
         return;
             
     def readASYFile(self, relfileandpath):
+        print('Loading Symbol file "'+relfileandpath+'"...')
         # read symbol file
         self.symlinecnt = 0;
         aSymbol = None;
@@ -416,8 +429,8 @@ class lt2circuiTikz:
             self.circDict.addText(self.lastText);
             self.lastText = None;       
     
-    def readASCFile(self, fielandpath):
-        
+    def readASCFile(self, fileandpath):
+        print('Reading ASC file "'+fileandpath+'"...')
         self.lastComponent = None;
         self.lastSymbol = None;
         self.lastAttributesDict = {};
@@ -430,9 +443,9 @@ class lt2circuiTikz:
         
         self.linecnt = 0;
         try :
-            fhs = open(fielandpath, mode='r', newline=None);
+            fhs = open(fileandpath, mode='r', newline=None);
         except Exception as e:
-            print('could not open ASC file "'+fielandpath+'" (cwd="'+os.curdir+'")');
+            print('could not open ASC file "'+fileandpath+'" (cwd="'+os.curdir+'")');
             return None;
         
         
@@ -779,6 +792,7 @@ class lt2circuiTikz:
         fhs.close();               
     
     def writeCircuiTikz(self, outfile):
+        print('Writing Tex commands to "'+outfile+'"...')
         xscale = 1 * self.lt2tscale;
         yscale = -1 * self.lt2tscale; # y is inverse for LTspice files
         xoffset = 0;
@@ -1118,7 +1132,7 @@ class CircuitDict:
             for coord, dictWires in coordWireDictCpy.items(): 
                 isAtCompPin = (coord in self.coordCompPinDict);
                 if (isAtCompPin): 
-                    print("Wire position "+str(coord)+' is incident with a component pin. Conversion to polywire suppressed.');
+                    print(" Wire position "+str(coord)+' is incident with a component pin. Conversion to polywire suppressed.');
                 
                 if (len(dictWires) == 2) and (coord not in self.coordCompDict) and (not isAtCompPin): # two wires joined at this point and no component node there. convert to PolyWire
                     changes = True # we join two wires, thus change the set and must reprocess it
@@ -1147,6 +1161,7 @@ class CircuitDict:
             #    if len(dictWires) == 2: # two wires joined at this point: convert them into a PolyWire
     
         # no more changes
+        print("Joining operations completed.")
         return cnt;
 
 class Attribute:
@@ -1933,19 +1948,22 @@ class PolyWire(Wire):
         
         if (Wire1.getP1Tuple() == Wire2.getP1Tuple()):
             # joined at P1  back to back  Wire1 <-> Wire2
+            print("  Wire1 <-> Wire2")
             x1_ = Wire1.x2
             y1_ = Wire1.y2
             
             if (type(Wire1) is PolyWire):
                 an = list(Wire1.xn); # copy so we can reverse it if necessary
                 an.reverse(); # turn the wire coordinate list 'around'
-                xn.extend(an); 
+                xn_.extend(an); 
                 an = list(Wire1.yn); # copy so we can reverse it if necessary
                 an.reverse(); # turn the wire coordinate list 'around'
-                yn.extend(an);
+                yn_.extend(an);
             
             xn_.append(Wire1.x1)
             yn_.append(Wire1.y1)
+            
+            print("  (Wire1 complete..)")
             
             if (type(Wire2) is PolyWire):
                 an = list(Wire2.xn); # copy so we can reverse it if necessary
@@ -1959,6 +1977,7 @@ class PolyWire(Wire):
             y2_ = Wire2.y2
         elif (Wire1.getP2Tuple() == Wire2.getP2Tuple()):
             # joined at P2 face to face  Wire1 >-< Wire2
+            print("  Wire1 >-< Wire2")
             x1_ = Wire1.x1
             y1_ = Wire1.y1
         
@@ -1985,6 +2004,7 @@ class PolyWire(Wire):
             y2_ = Wire2.y1            
         elif (Wire1.getP2Tuple() == Wire2.getP1Tuple()):
             # flow from Wire1 -> Wire2
+            print("  Wire1 -> Wire2")
             x1_ = Wire1.x1
             y1_ = Wire1.y1
         
@@ -2011,6 +2031,7 @@ class PolyWire(Wire):
             y2_ = Wire2.y2            
         elif (Wire1.getP1Tuple() == Wire2.getP2Tuple()):
             # flow from  Wire2 -> Wire1
+            print("  Wire2 -> Wire1")
             x1_ = Wire2.x1
             y1_ = Wire2.y1            
             
@@ -2038,6 +2059,8 @@ class PolyWire(Wire):
         else:
             # unknown
             print("Error: Unknown wire configuration for PolyWire:JoinWires")
+            
+        print("  Constructing new wire object..")
             
         pw = cls(name_, x1_, y1_, xn_, yn_, x2_, y2_)
         return pw;
@@ -2397,5 +2420,13 @@ def main():
     l2tobj.readASCFile(args.file);
     l2tobj.writeCircuiTikz(args.file+'.tex');    
     
-if __name__ == '__main__':
-    main();    
+
+try:
+    approot = os.path.dirname(os.path.abspath(__file__))
+    if __name__ == '__main__':
+        main();        
+except NameError:  # We are the main py2exe script, not a module
+    import sys
+    approot = os.path.dirname(os.path.abspath(sys.argv[0]))
+    main();        
+    

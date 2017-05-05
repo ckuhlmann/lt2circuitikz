@@ -5,6 +5,5 @@ BeginPinList
 EndPinList
 TexElementName *V
 BeginTex
-  %\draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l=#self.name#, a=#self.value#, ##mirror##, rotate=##rotate##,##options##] (#-:x1#,#-:y1#){};
-  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l=#self.name#, a=#self.value#,##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
+  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l_=#self.name#, a^=#self.value#,##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
 EndTex
