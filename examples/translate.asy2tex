@@ -1,4 +1,4 @@
-Type {Node|Bipole|Tripole|<N>pole}
+Type {Node|Bipole|Tripole|<N>pole|Graphical}
 Origin <x1> <y1> <rot> <mirror>
 BeginPinList (optional: otherwise created from ASC pin locations
 PinNum x1 y1 rot length PinName

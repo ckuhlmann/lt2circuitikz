@@ -1,0 +1,9 @@
+Type Graphical
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName None
+BeginTex
+  \draw [#self.texlinestyle#] (#self.texx1#,#self.texy1#) -- (#self.texx2#,#self.texy2#); % sch Line
+EndTex
