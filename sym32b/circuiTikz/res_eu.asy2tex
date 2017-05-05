@@ -5,6 +5,6 @@ BeginPinList
 EndPinList
 TexElementName *resistor
 BeginTex
-  \draw (#A:x1#, #A:y1#) to[#self.symbol.latexElementName#, l_=#self.name#, a^=#self.value#, ##options##] (#B:x1#,#B:y1#){};
+  \draw (#A:x1#, #A:y1#) to[#self.symbol.latexElementName#, l^=#self.name#, a_=#self.value#, #A:junction#-#B:junction#, ##options##] (#B:x1#,#B:y1#){};
   %\node [] at (#self.texx1#,#self.texy1#) {x};
 EndTex

@@ -4,6 +4,8 @@ LINE Normal 16 36 16 64
 LINE Normal 16 28 16 0
 LINE Normal 0 28 32 28
 LINE Normal 0 36 32 36
+LINE Normal 7 64 7 58
+LINE Normal 5 62 7 64
 WINDOW 0 24 8 Left 2
 WINDOW 3 24 56 Left 2
 SYMATTR Value C

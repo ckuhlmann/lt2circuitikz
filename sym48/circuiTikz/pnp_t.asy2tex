@@ -5,6 +5,6 @@ BeginPinList
 EndPinList
 TexElementName pnp
 BeginTex
- \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, nobodydiode, ##mirror_xscale##, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(0.6,0.5) node {#self.name# #self.value#};
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, nobodydiode, ##mirror_xscale##, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(1.0,1) node {#self.name# #self.value#};
  \draw (#B:x1#, #B:y1#) to [*short, -] (#self.name#.B); \draw (#E:x1#, #E:y1#) to [*short, -] (#self.name#.E); \draw (#C:x1#, #C:y1#) to [*short, -] (#self.name#.C);% extend wires to the connection points  
 EndTex

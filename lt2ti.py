@@ -995,7 +995,6 @@ class CircuitDict:
         
     def addComponent(self, aComp):
         self.compDict[aComp.uuid] = aComp;
-        pinPosList = aComp.getPinPosList();
         pp = (aComp.x1, aComp.y1);
         if (pp in self.coordCompDict):
             cdict = self.coordCompDict[pp];
@@ -1438,8 +1437,6 @@ class SchObject:
 
 class Component(SchObject):
     uuid = None;
-    pinPosList = [];
-    pins = {};
     x1 = 0;
     y1 = 0;
     texx1 = 0;
@@ -1468,6 +1465,11 @@ class Component(SchObject):
         self.rotation = rot;
         self.mirror = (mirror==True);
         self.symbol = None;
+        self.path = '';
+        self.pathandctype = '';
+        self.value2 = ""
+        self.attrlist = [];        
+        
         self.circuitDict = None; # ref to parent circuit dict to determine junctions etc.
         self.pathandctype = ctype;
         re_ctype = re.compile(r'(.*\\\\)([a-zA-Z0-9_-]+)$', flags=re.IGNORECASE);
@@ -1594,7 +1596,7 @@ class Component(SchObject):
         
         
         
-        line = re.sub('##options##',self.symbol.value2, line);
+        line = re.sub('##options##',self.value2, line);
         
         line = re.sub('##rotate##',str(round((-1)*self.rotation+(-1)*self.symbol.latexOriginRot+(-1)*self.symbol.symbolOriginRot)), line);
         
@@ -1651,10 +1653,10 @@ class Component(SchObject):
         self.symbol.symbolPins.removePin(aPin);
         
     def getPinCount(self):
-        return len(self.pinPosList);
+        return len(self.symbol.symbolPins.getAllPins());
     
     def getPinPosList(self):
-        return self.pinPosList;
+        return self.symbol.symbolPins.getAllPins()
     
     
     
@@ -2421,12 +2423,16 @@ def main():
     l2tobj.writeCircuiTikz(args.file+'.tex');    
     
 
+
+isstandalone = False;
 try:
     approot = os.path.dirname(os.path.abspath(__file__))
     if __name__ == '__main__':
-        main();        
+        isstandalone = True;        
 except NameError:  # We are the main py2exe script, not a module
     import sys
     approot = os.path.dirname(os.path.abspath(sys.argv[0]))
-    main();        
+    isstandalone = True;   
     
+if (isstandalone):
+    main();

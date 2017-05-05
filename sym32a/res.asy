@@ -7,8 +7,10 @@ LINE Normal 0 48 32 64
 LINE Normal 32 32 0 48
 LINE Normal 16 16 16 24
 LINE Normal 16 24 32 32
-WINDOW 0 36 40 Left 0
-WINDOW 3 36 76 Left 0
+LINE Normal 26 96 26 86
+LINE Normal 28 92 26 96
+WINDOW 0 36 40 Left 2
+WINDOW 3 36 76 Left 2
 SYMATTR Value R
 SYMATTR Prefix R
 SYMATTR Description A resistor
