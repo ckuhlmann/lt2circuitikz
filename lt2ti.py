@@ -228,11 +228,17 @@ class lt2circuiTikz:
         return aSymbol;
     
     def readASY2TexFile(self, relfileandpath, symbol):
+        asy2texfileandpath = self.scriptdir+os.sep+ relfileandpath
         try :
-            fht = open(self.scriptdir+os.sep+ relfileandpath, mode='r', newline=None);
+            fht = open(asy2texfileandpath, mode='r', newline=None);
         except Exception as e:
             print('Could not open requested asy2tex tile: "'+relfileandpath+'" (cwd="'+os.curdir+'")');
             return None;        
+        
+        print('Processing asy2tex file: "'+relfileandpath+'" (cwd="'+os.curdir+'")');
+        
+        rAliasFile = re.compile(r'ALIASFOR (.*\.asy2tex)[\s]*$', flags=re.IGNORECASE);
+        
         
         rType = re.compile(r'^[\s]*Type[\s]+([\S]+)', flags=re.IGNORECASE); # compile(r'^[\s]*SYMATTR[\s]+([\S]+)[\s]+(.*)', flags=re.IGNORECASE);
         rOriginTex = re.compile(r'^[\s]*TexOrigin[\s]+([-\d\.]+)[\s]+([-\d\.]+)[\s]+([-\d]+)[\s]+([01TRUEtrueFALSEfalse]+)', flags=re.IGNORECASE); 
@@ -266,6 +272,17 @@ class lt2circuiTikz:
         self.translinecnt = 0;
         for line in fht:
             self.translinecnt = self.translinecnt+1;
+            
+            m = rAliasFile.match(line);
+            if ((m != None) and (self.translinecnt < 2)): # must be at the beginning
+                fht.close();
+                pathtofile = os.path.dirname(asy2texfileandpath);
+                aliasfile = m.group(1);
+                aliasfileandpath = pathtofile+os.sep+aliasfile;
+                relaliasfileandpath = os.path.relpath(aliasfileandpath,  self.scriptdir+os.sep);
+                print('Found an alias entry: "'+aliasfile+'" which resolved to "'+aliasfileandpath+'" and "'+relaliasfileandpath+'" ');
+                aTSymbol = self.readASY2TexFile(relaliasfileandpath, symbol);
+                return aTSymbol;
             
             m = rPinList_be.match(line);
             if (m != None):            
@@ -608,9 +625,13 @@ class lt2circuiTikz:
     
     def _handleComponentValue(self, m):
         # SYMATTR Value <value>
-        self.lastComponent.value = m.group(1);
         attrkind = 'Value';
         attrval = m.group(1);
+        if (attrval == '""'): # this is the way LTspice indicates an empty value
+            attrval = '';
+
+        self.lastComponent.value = attrval;
+        
         if (not attrkind in self.lastAttributesDict):
             attr = Attribute(attrkind, attrval);
         else:
@@ -851,9 +872,11 @@ class lt2circuiTikz:
                         
                         x2b = xn[len(xn)-1]*xscale+xoffset;
                         y2b = yn[len(yn)-1]*yscale+yoffset;
-                        # normal wire segments for junctions:
-                        fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1b)+','+str(y1b)+');% wire '+wire.name+' start\n');
-                        fhd.write(r'\draw ('+str(x2b)+r','+str(y2b)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');
+                        # normal wire segments for junctions: (this works with zero length segements, so we do not use the x1b/y1b, x2b/y2b points any longer.)
+                        fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1)+','+str(y1)+');% wire '+wire.name+' start\n');
+                        fhd.write(r'\draw ('+str(x2)+r','+str(y2)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');                        
+                          #fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1b)+','+str(y1b)+');% wire '+wire.name+' start\n');
+                          #fhd.write(r'\draw ('+str(x2b)+r','+str(y2b)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');
                         # polyline
                         wstr = '\draw ('+str(x1)+r','+str(y1)+r')';
                         for i in range(0, (len(xn))):
