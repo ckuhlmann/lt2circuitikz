@@ -4,7 +4,7 @@
 This script takes a [LTSpice](http://www.linear.com/solutions/ltspice) (IV, XVII) circuit file (*.asc) and tries to convert it to a  [LaTeX](https://www.latex-project.org/get/) document containing a [pgf/TikZ](https://www.ctan.org/pkg/pgf) picture of the schematic, using the [CircuiTikZ](https://www.ctan.org/pkg/circuitikz) package to draw the symbols.
 The document can then be compiled, e.g. into PDF format.
 
-Take a look at this [example PDF file](https://github.com/ckuhlmann/lt2circuitikz/blob/master/examples/Test.asc.pdf)
+Take a look at this [example PDF file](https://github.com/ckuhlmann/lt2circuitikz/blob/master/examples/catalog.asc.pdf) produced from [this](https://github.com/ckuhlmann/lt2circuitikz/blob/master/examples/catalog.asc) sample document [(direct comparison)](https://github.com/ckuhlmann/lt2circuitikz/blob/master/examples/catalog.png).
 
 
 Currently supported features:
