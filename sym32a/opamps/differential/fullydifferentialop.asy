@@ -14,7 +14,7 @@ LINE Normal 4 23 12 23
 LINE Normal 0 -16 32 -16
 LINE Normal -3 17 0 22
 LINE Normal -3 -17 0 -22
-LINE Normal 33 16 7 16
+LINE Normal 32 16 7 16
 LINE Normal 0 16 2 16
 CIRCLE Normal 7 19 2 14
 WINDOW 0 16 -32 Left 2

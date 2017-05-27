@@ -1,0 +1,14 @@
+Version 4
+SymbolType CELL
+LINE Normal 80 -98 48 -98
+LINE Normal 64 -75 80 -98
+LINE Normal 48 -98 64 -75
+LINE Normal 64 0 64 -98
+LINE Normal 0 0 64 0
+ARC Normal 108 -104 88 -69 107 -71 109 -100
+ARC Normal 119 -104 99 -69 115 -70 117 -102
+ARC Normal 97 -104 77 -69 101 -75 101 -96
+ARC Normal 87 -103 67 -68 92 -79 91 -92
+PIN 0 0 NONE 8
+PINATTR PinName a
+PINATTR SpiceOrder 1

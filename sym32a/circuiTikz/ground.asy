@@ -1,5 +1,5 @@
 Version 4
-SymbolType BLOCK
+SymbolType CELL
 LINE Normal 0 16 0 0
 LINE Normal 11 7 -11 7
 LINE Normal 7 10 -7 10

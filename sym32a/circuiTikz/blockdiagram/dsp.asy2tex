@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *dsp
+BeginTex
+  \draw (#-:x1#, #-:y1#) to[#self.symbol.latexElementName#, t=#self.value#, l_=#self.name#, a^=#self.value#,##mirror_mirror##, #-:junction#-#+:junction#, ##options##] (#+:x1#,#+:y1#){};
+EndTex

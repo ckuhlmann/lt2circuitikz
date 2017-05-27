@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 2.836 0 0 False
+BeginPinList
+EndPinList
+TexElementName en amp
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, rotate=##rotate##, ##options##] (#self.name#) {}  (#self.name#)++(##labelmirrorx##*0.75,  ##labelmirrory##*2.0) node {#self.name# #self.value#};
+ \draw (#In+:x1#,#In+:y1#) to [*short, -] (#self.name#.+);   \draw (#In-:x1#,#In-:y1#) to [*short, -] (#self.name#.-); \draw (#OUT:x1#,#OUT:y1#) to [*short, -] (#self.name#.out); % in/out
+EndTex

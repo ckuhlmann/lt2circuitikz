@@ -1,0 +1,9 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName tlinestub
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {};%  (#self.name#)++(0.0,0.0) node {#self.name# #self.value#};
+EndTex

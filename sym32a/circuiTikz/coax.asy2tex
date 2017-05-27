@@ -1,0 +1,10 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *tline
+BeginTex
+  \draw (#I1:x1#, #I1:y1#) to[#self.symbol.latexElementName#, l^=#self.name#, a_=#self.value#, #I1:junction#-#I2:junction#, ##mirror_mirror##, ##options##] (#I2:x1#,#I2:y1#){};  %\node [] at (#self.texx1#,#self.texy1#) {x};
+  \draw [] (#I2:x1#, #I2:y1#) to ({#I2:x1#+(#I1:x1#-#I2:x1#)*0.33}, {#I2:y1#+(#I1:y1#-#I2:y1#)*0.33}); % fix entry point
+EndTex

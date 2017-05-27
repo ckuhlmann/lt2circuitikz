@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *tgeneric
+BeginTex
+  \draw (#A:x1#, #A:y1#) to[#self.symbol.latexElementName#, l^=#self.name#, a_=#self.value#, #A:junction#-#B:junction#, ##mirror_mirror##, ##options##] (#B:x1#,#B:y1#){}; %\node [] at (#self.texx1#,#self.texy1#) {x};
+EndTex

@@ -1,0 +1,11 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *thermistor ntc
+BeginTex
+  \draw (#out:x1#, #out:y1#) to[#self.symbol.latexElementName#, l^=#self.name#, a_=#self.value#, #out:junction#-#com:junction#, ##mirror_mirror##, n=#self.name#, ##options##] (#com:x1#,#com:y1#){};  %\node [] at (#self.texx1#,#self.texy1#) {x};
+  %\draw [/lt2ti/Net](#invin:x1#,#invin:y1#) to [*short, -, color=netcolor] (#self.name#.W); % wiper connection 
+  %\draw [/lt2ti/Net](#noninvin:x1#,#noninvin:y1#) to [*short, -, color=netcolor] (#self.name#.W); % wiper connection
+EndTex

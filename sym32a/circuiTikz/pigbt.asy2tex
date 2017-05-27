@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName pigbt
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, nobodydiode, ##mirror_xscale##, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(1.0,1) node {#self.name# #self.value#};
+ \draw [/lt2ti/Net](#B:x1#, #B:y1#) to [*short, -] (#self.name#.B); \draw [/lt2ti/Net](#E:x1#, #E:y1#) to [*short, -] (#self.name#.E); \draw [/lt2ti/Net](#C:x1#, #C:y1#) to [*short, -] (#self.name#.C);% extend wires to the connection points  
+EndTex

@@ -33,6 +33,7 @@
 %\draw (0,0) node[<CompName>,<Options,optional>] (<AnchorName,optional>) {<TextAtAnchor,optional>}; % curly brackets are mandatory, even if empty!
 %\draw (<x1>,<y1>) to[<CompName>,<Options,optional>] (<x2>,<y2>);
 \usetikzlibrary{circuits.ee.IEC}
+\usetikzlibrary{arrows}
 
 \ctikzset{
 	/tikz/circuitikz/bipoles/diode/height=0.375,%
@@ -44,18 +45,25 @@
 	/tikz/circuitikz/bipoles/inductor/voltage/straight label distance/.initial=.8,
 	/tikz/circuitikz/bipoles/fullgeneric/voltage/straight label distance/.initial=.8,
 	/tikz/circuitikz/bipoles/capacitor/voltage/straight label distance/.initial=1.0,
+	/tikz/circuitikz/bipoles/thickness=1.6,
 }
 \ctikzset{v/.append style={/tikz/european voltages}}
 
-\pgfkeys{/lt2ti/netlabel/font/.initial= \small}
-\pgfkeys{/lt2ti/text/font/.initial= \small}
-\tikzstyle{dashdotdotted}=[dash pattern=on 3pt off 2pt on \the\pgflinewidth off 2pt on \the\pgflinewidth off 2pt]
 \definecolor{netlabelcolor}{rgb}{0, 0, 0.25}
 \definecolor{lttotitextcolor}{rgb}{0, 0.4, 0.25}
 \definecolor{lttotidrawcolor}{rgb}{0.6, 0.6, 0.6}
+\definecolor{netcolor}{rgb}{0, 0, 0.5}
+
+\pgfkeys{/lt2ti/netlabel/font/.initial= \small}
+\pgfkeys{/lt2ti/text/font/.initial= \small}
+
+\pgfkeys{/lt2ti/Net/.style= {netcolor}}
+\tikzstyle{dashdotdotted}=[dash pattern=on 3pt off 2pt on \the\pgflinewidth off 2pt on \the\pgflinewidth off 2pt]
+
 \pgfkeys{/lt2ti/VArrow/.style= {->,>=latex}}
+\pgfkeys{/lt2ti/SArrow/.style= {->,>=angle 90}}
 
 \begin{document}%
 	%\centering%
-	\begin{tikzpicture}[circuit ee IEC]
+	\begin{tikzpicture}[circuit ee IEC,line width=.5pt]
 	%\tikzstyle{every node}=[font=\large];%

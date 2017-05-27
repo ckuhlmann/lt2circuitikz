@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin -8.5 0 0 False
+BeginPinList
+EndPinList
+TexElementName oscillator
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, ##mirror_xscale##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(0.4,1) node {#self.name# #self.value#};
+ \draw [/lt2ti/Net](#1:x1#, #1:y1#) to [*short, -] (#self.name#.north); % extend wires to the connection points  
+EndTex

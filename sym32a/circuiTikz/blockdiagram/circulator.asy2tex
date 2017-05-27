@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName circulator
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, ##mirror_xscale##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(1.2,1) node {#self.name# #self.value#};
+ \draw [/lt2ti/Net](#1:x1#, #1:y1#) to [*short, -] (#self.name#.1); \draw [/lt2ti/Net](#2:x1#, #2:y1#) to [*short, -] (#self.name#.2); \draw [/lt2ti/Net](#3:x1#, #3:y1#) to [*short, -] (#self.name#.3);% extend wires to the connection points  
+EndTex

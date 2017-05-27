@@ -1,0 +1,19 @@
+Version 4
+SymbolType CELL
+LINE Normal -48 0 -40 0
+LINE Normal 48 0 40 0
+LINE Normal 42 -11 46 -11
+LINE Normal 45 -13 46 -11
+RECTANGLE Normal 40 40 -40 -40
+RECTANGLE Normal -12 28 -15 -16
+RECTANGLE Normal 28 -16 -26 -19
+RECTANGLE Normal 18 28 15 -16
+WINDOW 0 -46 -55 Left 2
+WINDOW 3 0 56 Center 2
+SYMATTR Value V
+PIN 48 0 NONE 0
+PINATTR PinName +
+PINATTR SpiceOrder 1
+PIN -48 0 NONE 0
+PINATTR PinName -
+PINATTR SpiceOrder 2

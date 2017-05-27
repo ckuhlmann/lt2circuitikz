@@ -1,7 +1,7 @@
 Type Node
 TexOrigin 0 0 0 False
 SymOrigin2 48 64 180 True
-SymOrigin 48 67 180 True
+SymOrigin 48 67.1 180 True
 BeginPinList
 EndPinList
 TexElementName pigfete

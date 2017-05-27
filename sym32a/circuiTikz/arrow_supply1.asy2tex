@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName VArrow
+BeginTex
+  \draw [/lt2ti/SArrow] (#+:x1#, #+:y1#) -- (#-:x1#,#-:y1#) node [midway, right] {#self.name# #self.value#}; % volt.arrow
+EndTex

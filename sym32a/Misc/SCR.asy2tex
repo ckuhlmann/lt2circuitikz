@@ -1,0 +1,10 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 True
+BeginPinList
+EndPinList
+TexElementName *Ty
+BeginTex
+  \draw (#A:x1#, #A:y1#) to[#self.symbol.latexElementName#, n=#self.name#, l^=#self.name#, a_=#self.value#, ##mirror_mirror##, ##options##] (#K:x1#,#K:y1#){}; %\node [] at (#self.texx1#,#self.texy1#) {x};
+  \draw [/lt2ti/Net](#G:x1#, #G:y1#) to [*short, -] (#self.name#.G); 
+EndTex

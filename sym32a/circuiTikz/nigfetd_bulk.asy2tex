@@ -1,0 +1,11 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin2 0 0 0 False
+SymOrigin 0 3.1 0 False
+BeginPinList
+EndPinList
+TexElementName nigfetdbulk
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, nobodydiode, ##mirror_xscale##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(1.2,1) node {#self.name# #self.value#};
+ \draw [/lt2ti/Net](#G:x1#, #G:y1#) to [*short, -] (#self.name#.G); \draw [/lt2ti/Net](#D:x1#, #D:y1#) to [*short, -] (#self.name#.D); \draw [/lt2ti/Net](#S:x1#, #S:y1#) to [*short, -] (#self.name#.S);% extend wires to the connection points  
+EndTex

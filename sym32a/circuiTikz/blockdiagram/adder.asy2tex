@@ -1,0 +1,10 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName adder
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, ##mirror_xscale##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {}   (#self.name#)++(1.2,1) node {#self.name# #self.value#};
+ \draw [/lt2ti/Net](#in1:x1#, #in1:y1#) to [*short, -] (#self.name#.in1); \draw [/lt2ti/Net](#in2:x1#, #in2:y1#) to [*short, -] (#self.name#.in2); \draw [/lt2ti/Net](#out:x1#, #out:y1#) to [*short, -] (#self.name#.out);% extend wires to the connection points  
+EndTex

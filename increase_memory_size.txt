@@ -1,0 +1,10 @@
+MikTex pdflatex, windows:
+  on command (cmd) prompt:
+	initexmf --edit-config-file pdflatex
+  insert line:
+	main_memory=9000000 
+  save and exit.
+
+  on command prompt:
+	initexmf --dump=pdflatex
+  enjoy.

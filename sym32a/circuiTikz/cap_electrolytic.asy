@@ -1,0 +1,32 @@
+Version 4
+SymbolType CELL
+LINE Normal 16 38 16 64
+LINE Normal 16 0 16 25
+LINE Normal 8 12 8 20
+LINE Normal 4 16 12 16
+LINE Normal 0 29 32 29
+LINE Normal 0 38 32 38
+LINE Normal 3 35 0 37
+LINE Normal 6 35 2 38
+LINE Normal 9 35 5 38
+LINE Normal 12 35 8 38
+LINE Normal 15 35 11 38
+LINE Normal 18 35 14 38
+LINE Normal 21 35 17 38
+LINE Normal 24 35 20 38
+LINE Normal 27 35 23 38
+LINE Normal 30 35 26 38
+LINE Normal 32 36 29 38
+RECTANGLE Normal 32 25 0 29
+RECTANGLE Normal 32 35 0 38
+WINDOW 0 24 8 Left 2
+WINDOW 3 24 57 Left 2
+SYMATTR Value C
+SYMATTR Prefix C
+SYMATTR Description Polarized Capacitor
+PIN 16 0 NONE 0
+PINATTR PinName A
+PINATTR SpiceOrder 1
+PIN 16 64 NONE 0
+PINATTR PinName B
+PINATTR SpiceOrder 2

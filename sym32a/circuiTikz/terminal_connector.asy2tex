@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName VArrow
+BeginTex
+  \draw (#+:x1#, #+:y1#) to [*short, o-, ##options##] (#-:x1#,#-:y1#); \node [netlabelcolor] at (#+:x1#, #+:y1#+0.4) {{\pgfkeysvalueof{/lt2ti/netlabel/font}#self.value#}};
+EndTex

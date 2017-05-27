@@ -1,0 +1,1 @@
+python test_lt2ti.py>test_lt2ti.log

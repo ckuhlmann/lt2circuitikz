@@ -7,6 +7,8 @@ import configparser;
 
 class lt2circuiTikz:
     
+    lastASCfile = None;
+    
     reIsHdr = re.compile(r'[\s]*Version 4[\s]+', flags=re.IGNORECASE);
     
     reIsSym = re.compile(r'[\s]*SymbolType[\s]+(.*)$', flags=re.IGNORECASE);# ASY file symbol type definition  do NOT confuse with reIsComponent: an instance of a symbol
@@ -98,6 +100,7 @@ class lt2circuiTikz:
         #self.lt2tscale = (1.0/64.0);
         self.lt2tscale = (1.0/48.0);
         self.includepreamble = True;
+        self.lastASCfile = None;
         
         try:
             approot2 = (os.path.dirname(os.path.realpath(__file__)));
@@ -457,6 +460,7 @@ class lt2circuiTikz:
         self.circDict = CircuitDict();
         self.symbolDict = SymbolDict();
         self.lastText = None
+        self.lastASCfile = fileandpath;
         
         self.linecnt = 0;
         try :
@@ -805,6 +809,15 @@ class lt2circuiTikz:
         fhd.close();
         fhs.close();    
         
+    def copyFile(self,source,destination):
+        fhs = open(source, mode='r', newline='');
+        fhd = open(destination, mode='w', newline=''); # prevent automatic newline conversion to have more control over nl chars.
+        for line in fhs:
+            #print('copying line "'+line+'" from source to destination');
+            fhd.write(line);
+        fhd.close();
+        fhs.close();    
+        
     def copyFileContentsToHandle(self,source,hdestination):
         fhs = open(source, mode='r', newline=None);
         for line in fhs:
@@ -824,6 +837,16 @@ class lt2circuiTikz:
         if (self.includepreamble):
             self.copyFileContentsToHandle(self.scriptdir+os.sep+ self.symfilebasepath+'latex_preamble.tex', fhd);
             
+            if (self.config.has_option('general','latexincludes')):
+                incfiles = self.config.get('general','latexincludes');
+                
+                incfiles = incfiles.split(';');
+                for incfile in incfiles:
+                    srcfile = self.scriptdir+os.sep+ self.symfilebasepath + incfile;
+                    dstfile = os.path.dirname(outfile) +os.sep + os.path.basename(incfile);
+                    self.copyFile(srcfile, dstfile)
+            
+            
         if (self.config.has_option('general','bipoles_length')):
             bipoles_length = self.config.get('general','bipoles_length');
             fhd.write(r'\ctikzset{bipoles/length='+bipoles_length+'}\n');
@@ -833,10 +856,14 @@ class lt2circuiTikz:
         self.circDict.wiresToPolyWires();
         
         #output wires:
-        wireDict = self.circDict.getWires();
+        wireDict = self.circDict.getWiresByCoord();
         for pp, dictWires in wireDict.items():
             # all wires at the pp position
-            if (len(dictWires) <= 2): # no junction
+            
+            #jcnt = self.circDict.getJunctionCound(pp);
+            jcnt = self.circDict.getJunctionCount(pp);
+            
+            if (jcnt <= 2): # no junction
                 p1junction = '';
             else: # junction
                 p1junction = '*';
@@ -846,7 +873,8 @@ class lt2circuiTikz:
                 if (pp1 == pp): # only draw wire if pos1 is attached. Otherwise wires will get drawn multiple times.
                     pp2 = wire.getP2Tuple();
                     
-                    if (len(wireDict[pp2]) <= 2):
+                    jcnt2 = self.circDict.getJunctionCount(pp2);
+                    if (jcnt2 <= 2):
                         p2junction = '';
                     else:
                         p2junction = '*';
@@ -861,7 +889,7 @@ class lt2circuiTikz:
                         lenxn = len(wire.xn);
                     if ( ((type(wire) is Wire) and not (type(wire) is PolyWire)) or ( (type(wire) is PolyWire) and ( len(wire.xn) <= 0) )): # normal wire or polywire with no intermediate segments
                         # \draw (8,2)to[*short,*-] (8,4);%
-                        fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+'\n');
+                        fhd.write(r'\draw [/lt2ti/Net]('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-'+p2junction+', color=netcolor] ('+str(x2)+','+str(y2)+');% wire '+wire.name+'\n');
                     else:
                         # polywire
                         # \draw (4,2) -- (4,4) -- (6,4);
@@ -873,12 +901,12 @@ class lt2circuiTikz:
                         x2b = xn[len(xn)-1]*xscale+xoffset;
                         y2b = yn[len(yn)-1]*yscale+yoffset;
                         # normal wire segments for junctions: (this works with zero length segements, so we do not use the x1b/y1b, x2b/y2b points any longer.)
-                        fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1)+','+str(y1)+');% wire '+wire.name+' start\n');
-                        fhd.write(r'\draw ('+str(x2)+r','+str(y2)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');                        
-                          #fhd.write(r'\draw ('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1b)+','+str(y1b)+');% wire '+wire.name+' start\n');
-                          #fhd.write(r'\draw ('+str(x2b)+r','+str(y2b)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');
+                        fhd.write(r'\draw [/lt2ti/Net]('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-, color=netcolor] ('+str(x1)+','+str(y1)+');% wire '+wire.name+' start\n');
+                        fhd.write(r'\draw [/lt2ti/Net]('+str(x2)+r','+str(y2)+r')to[*short,-'+p2junction+', color=netcolor] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');                        
+                          #fhd.write(r'\draw [/lt2ti/Net]('+str(x1)+r','+str(y1)+r')to[*short,'+p1junction+'-] ('+str(x1b)+','+str(y1b)+');% wire '+wire.name+' start\n');
+                          #fhd.write(r'\draw [/lt2ti/Net]('+str(x2b)+r','+str(y2b)+r')to[*short,-'+p2junction+'] ('+str(x2)+','+str(y2)+');% wire '+wire.name+' end\n');
                         # polyline
-                        wstr = '\draw ('+str(x1)+r','+str(y1)+r')';
+                        wstr = '\draw [/lt2ti/Net]('+str(x1)+r','+str(y1)+r')';
                         for i in range(0, (len(xn))):
                             xni = xn[i]*xscale+xoffset;
                             yni = yn[i]*yscale+yoffset;
@@ -1033,13 +1061,14 @@ class CircuitDict:
             
     def addComponentPin(self, aComp, aPin):
         pp = aComp.getAbsolutePinPos(aPin);
+        ppint = (int(round(pp[0])), int(round(pp[1]))); # use integer, since the AbsolutePinPos might have produced roundoff errors during rotation/shifting.
         #pp = (pin.x1 + aComp.x1, pin.y1 + aComp.y1) # convert to absolute position
-        if (pp in self.coordCompPinDict):
-            dictComps = self.coordCompPinDict[pp];
+        if (ppint in self.coordCompPinDict):
+            dictComps = self.coordCompPinDict[ppint];
         else:
             dictComps = {};
         dictComps[aComp.uuid] = aComp;
-        self.coordCompPinDict[pp] = dictComps;        
+        self.coordCompPinDict[ppint] = dictComps;        
 
     def _removeComponent_compDic(self, cmpDict, aComp):
         res = compDict.Pop(aComp.uuid, None);
@@ -1066,6 +1095,7 @@ class CircuitDict:
         success = True;
         success = success and _removeComponent_compDic(self, self.compDict, aComp);
         success = success and _removeComponent_coordDic(self, self.coordCompDict, aComp);
+        # todo: remove pins
     
     def _removeWire_wireDic(self, dic, aWire):
         res = dic.pop(aWire.uuid,None)
@@ -1137,9 +1167,19 @@ class CircuitDict:
             return self.coordCompPinDict[aPoint];
         return {}
     
-    def getWires(self):
+    def getWiresByCoord(self):
         return self.coordWireDict;
     
+    def getJunctionCount(self, point):
+        pp = point;
+        cnt = 0;
+        if (pp in self.coordCompPinDict):
+            cnt = cnt+ len(self.coordCompPinDict[pp]);
+        
+        if (pp in self.coordWireDict):
+            cnt = cnt+ len(self.coordWireDict[pp]); 
+
+        return cnt;
         
     def wiresToPolyWires(self):
         changes = True
@@ -1423,7 +1463,7 @@ class SchObject:
             line = re.sub('##mirror_yscale##','yscale=-1', line);
             line = re.sub('##mirror_yscale_value##','-1', line);
             line = re.sub('##mirror##','invert', line); # for circuiTikz mirror means horizontal mirror, but we want vertical mirror, wich is invert in circuiTikz terminology
-            if (int((self.rotation/90)%2) == 0): # not 90° (or odd multiples) rotated
+            if (int((self.rotation/90)%2) == 0): # not 90deg (or odd multiples) rotated
                 line = re.sub('##mirror_rot_xscale_value##','-1', line); # rotated mirror scaling
                 line = re.sub('##mirror_rot_yscale_value##','1', line); # rotated mirror scaling
             else:
@@ -1609,11 +1649,11 @@ class Component(SchObject):
         
         line = re.sub('#([A-Za-z0-9_+\-!]+):junction#',self._pinIsJunction, line);
         
+        line = re.sub('#self.symbol.conversionKV.([A-Za-z0-9_\-!]+)#',self._symcKVAttrStrToAttr, line);
+        
         line = re.sub('#self.symbol.([A-Za-z0-9_\-!]+)#',self._symAttrStrToAttr, line);
         
         line = re.sub('#self.config.([A-Za-z0-9_\-!]+)#',self._confAttrStrToAttr, line);
-        
-        line = re.sub('#self.symbol.conversionKV.([A-Za-z0-9_\-!]+)#',self._symcKVAttrStrToAttr, line);
         
         line = re.sub('#self.([A-Za-z0-9_\-!]+)#',self._attrStrToAttr, line);
         

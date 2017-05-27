@@ -1,0 +1,9 @@
+Type Node
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName vcc
+BeginTex
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, yscale=1, rotate=##rotate##, ##options##] (#self.name#) {}; \draw (#self.name#)++(0.75,0.5) node {#self.value#};
+EndTex
