@@ -37,6 +37,7 @@ or, when using the executable
 ```bash
 "D:\scriptdir\LT2circuiTikz\lt2ti.exe" "D:\testdrive\catalog.asc">run.log
 ```
+_Note: In some cases it can be necessary to have the current working directory of the command line shell at the location where lt2ti.py and the symbol folders are located. Otherwise lt2ti will not find the symbols._
 
 You will then find your converted file at D:\\testdrive\\catalog.asc.tex
 
@@ -84,7 +85,27 @@ This script or its author are not in any way affiliated to these companies.
 
 This script is provided as-is and without any warranty.
 
-## \*.asy2tex file documentation
+
+## Creating new symbols
+
+### Adding symbols to LTspice
+Creating new symbols in LTspice works the same way as it does normally (see the _Creating New Symbols_ section in the LTspice help file). 
+There are no required extra steps involved. To have good visual equivalence between the spice circuit and the circuiTikz result, your pin spacing and proportions in your spice symbol compared to existing symbols should approximately match the ratio of the two circuiTikz symbols. To make debugging easier, you could try to position your origin at the center or at a pin, but this is not mandatory. Please consult one of the many good tutorials on how to create symbols in LTspice on how to do this. If you only use the new symbol to create circuiTikz graphics, you don't need to provide a valid spice model. If you want to be able to simulate the circuit as well, you should provide one.
+
+### Creating an asy2tex file to translate a (new) LTspice symbol to circuitikz
+asy2tex files are the ones that store information on how to convert any symbol found in the schematic to circuiTikz code.
+To add a new symbol you need to do the following:
+1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`.
+2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension. E.g. if you copied `MyNewSymbol.asy` to `sym32a`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory.
+3. Open the asy2tex file and enter the required tokens according to the [following section](#asy2texdocu) to produce the desired circuiTikz code. Use existing conversion files as a template.
+	* To get you started, first look up the symbol in the circuiTikz manual and see whether it is a bipole, tripole or some other symbol (e.g. an opamp). Choose the Type in the asy2tex file accordingly.
+	* Take a look at the existing asy2tex file of the same type to get you started and with a template.
+	* Bipoles are often very straight forward: Simply replace the element name of an existing element (e.g. a resistor) and most of the time you are done. 
+	* opamp and transistor symbols often come down to positioning the circuiTikz symbol, so that the pins get positioned on the LTspice grid as transformed to the circuiTikz plane. Use the SymOrigin field to move the symbol around in the spice domain, in order to map your spice origin to the circuiTikz symbol origin. Having the origin at the center is a huge benefit for complex symbols. For most symbols, this will align the pins at the same time.
+	* If the circuiTikz pins are not on-grid because the distance between them does not match the spice grid (in the circuiTikz plane), you need to scale the symbol. Take a look at the sym32b\latex_preamble.tex preamble file to see how scaling can be done in circuiTikz. However, it is generally advisable to use the same grid for new circuiTikz symbols as that of the existing ones, and therefore scaling should not be necessary for sym32a style conversions (see below what sym32a, sym32b means). All currently translated circuiTikz symbols have this grid pattern.
+4. Give the new symbol a try by using it in a schematic (*.asc) file, convert it like described previously, and compile the latex file to check the result. Adjust the asy2tex code until the result pleases you. Congratulations, you have just created your first lt2circuitikz symbol!
+
+### \*.asy2tex file documentation <a name="asy2texdocu"></a>
 
 asy2tex files perform the conversion from *.asy symbols to LaTeX commands.
 A typical asy2tex file looks like this:
