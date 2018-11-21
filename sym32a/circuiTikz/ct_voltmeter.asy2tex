@@ -1,0 +1,9 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *voltmeter
+BeginTex
+  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, a_=#self.value#,##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
+EndTex

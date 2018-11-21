@@ -49,6 +49,9 @@ class lt2circuiTikz:
     reIsRect = re.compile(r'^[\s]*RECTANGLE[\s]+([\S]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]*([-\d]*)', flags=re.IGNORECASE);
     # Rect                                       type           x1          y1          x2           y2           stype    
     
+    reIsCircle = re.compile(r'^[\s]*CIRCLE[\s]+([\S]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]+([-\d]+)[\s]*([-\d]*)', flags=re.IGNORECASE);
+    # Circle/Oval                                type           x1          y1          x2           y2           stype        
+    
     
     # symbols:
     
@@ -539,6 +542,11 @@ class lt2circuiTikz:
                 self._handleRect(m);            
                 continue;                        
             
+            m = self.reIsCircle.match(line);
+            if (m != None):
+                self._handleCircle(m);            
+                continue;             
+            
             print("could not match line '"+line.replace('\n','')+"'");
         self._resetLast(); # handle last item
         
@@ -799,6 +807,36 @@ class lt2circuiTikz:
         schrect.symbol = tsym;            
         self.circDict.addSchLine(schrect);
         return;        
+    
+    def _handleCircle(self, m):
+        if ((m.group(6)) != ''):
+            lstyle = int(m.group(6));
+        else:
+            lstyle = 0;        
+        schcirc = SchCirc(int(m.group(2)), int(m.group(3)), int(m.group(4)), int(m.group(5)), lstyle)
+        schcirc.kind = (m.group(1));
+        
+        pathandctype = 'SchCirc';
+        if not self.symbolDict.hasSymbolPath(pathandctype):
+            # not cached, try to load
+            fullpath = self.symfilebasepath + pathandctype.replace('\\\\','\\');
+            #sym = self.readASYFile(fullpath+'.asy');
+            sym = Symbol(pathandctype);
+            sym.lt2tscale = self.lt2tscale;
+            sym.path = '';
+            sym.ctype = pathandctype;
+            sym.pathandctype = pathandctype;
+            
+            tsym = self.readASY2TexFile(fullpath+'.asy2tex',sym);
+            if (tsym != None):
+                self.symbolDict.addSymbol(tsym); # add symbol and translation information
+        else:
+            # already existing in cache
+            tsym = self.symbolDict.getSymbolByPath(pathandctype);
+            
+        schcirc.symbol = tsym;            
+        self.circDict.addSchLine(schcirc);
+        return;            
     
     def copyFileContents(self,source,destination):
         fhs = open(source, mode='r', newline='');
@@ -1949,6 +1987,12 @@ class SchRect(SchTwopoint):
     def __init__(self, x1, y1, x2, y2, style):
         super().__init__(x1,y1, x2,y2, style);
         self.pathandctype = 'SchRect'
+        
+class SchCirc(SchTwopoint):
+    uuid = None;
+    def __init__(self, x1, y1, x2, y2, style):
+        super().__init__(x1,y1, x2,y2, style);
+        self.pathandctype = 'SchCirc'
 
 class Wire:
     'LTpice Wire definition'
