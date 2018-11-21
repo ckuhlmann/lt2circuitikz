@@ -115,7 +115,7 @@ To add a new symbol you need to do the following:
 	* Take a look at the existing asy2tex file of the same type to get you started and with a template.
 	* Bipoles are often very straight forward: Simply replace the element name of an existing element (e.g. a resistor) and most of the time you are done. 
 	They usually contain the bipole element and reference the translated coordinates of the symbol pins via [#&lt;PinName&gt;:x1#](#ElemPinNamex1) and [#&lt;PinName&gt;:x1#](##ElemPinNamey1), where &lt;PinName&gt; is the name of the pin in the spice symbol.
-	* Opamp and transistor symbols often come down to positioning the circuiTikz symbol, so that the pins get positioned on the LTspice grid as transformed to the circuiTikz plane. Use the [SymOrigin](#ElemSymOrigin) field to move the symbol around in the spice domain, in order to map your spice origin to the circuiTikz symbol origin. Having the origin at the center is a huge benefit for complex symbols. For most symbols, this will align the pins at the same time.
+	* Opamp and transistor symbols often come down to positioning the circuiTikz symbol, so that the pins get positioned on the LTspice grid as transformed to the circuiTikz plane. Insert the symbol at [#self.texx1#, #self.texy1#](#ElemSelftexx1Selftexx2). Use the [SymOrigin](#ElemSymOrigin) field to move the symbol around in the spice domain, in order to map your spice origin to the circuiTikz symbol origin. Similarly, [TexOrigin](#ElemTexOrigin) moves the origin in the latex coordinate space. Having the origin at the center is a huge benefit for complex symbols (in both domains). For most symbols, moving the origin to the proper place will align the pins at the same time.
 	* If the circuiTikz pins are not on-grid because the distance between them does not match the spice grid (in the circuiTikz plane), you need to scale the symbol. Take a look at the sym32b\latex_preamble.tex preamble file to see how scaling can be done in circuiTikz. However, it is generally advisable to use the same grid for new circuiTikz symbols as that of the existing ones, and therefore scaling should not be necessary for sym32a style conversions (see below what sym32a, sym32b means). All currently translated circuiTikz symbols have this grid pattern.
 	You might need to add short wires to connect to the "spice" pins. See the opamp symbols' `UniversalOpamp2.asy2tex` as examples. It creates a named node by using the [#self.name#](#ElemSelfName) token and thus allows a unique reference to its pins. You can also use the capability to specify relative coordinates in circuiTikz to your advantage, e.g. when positioning labels.
 4. Give the new symbol a try by using it in a schematic (*.asc) file, convert it like described previously, and compile the latex file to check the result. Adjust the asy2tex code until the result pleases you. Congratulations, you have just created your first lt2circuitikz symbol!
@@ -143,9 +143,10 @@ and contains the following elements:
 <dt><code>ALIASFOR ..\res.asy2tex</code></dt>
 <dd>Alias definition. Must be on the first line if present. The file will not be read any further after this line. Instead, the specified translation file will be used as if their contents were copied to this file. Useful if you want to create a new symbol (e.g. a with a defined model etc.) with the same output as an existing one.</dd>
 
-<dt><a name="ElemType"></a><code>Type</code></dt>
+  <dt><a name="ElemType"></a><code>Type</code></dt>
   <dd>Type of the symbol. Can be one of [Node|Bipole|Tripole|&lt;N&gt;pole|Graphical]. Historically, Node can also be used for Tripoles and N-Poles</dd>
-  <dt><code>TexOrigin x1 y1 rotatedeg mirror</code></dt>
+  
+  <dt><a name="ElemTexOrigin"></a><code>TexOrigin x1 y1 rotatedeg mirror</code></dt>
   <dd>Used to specify an offset (by x1, y1), rotation (in degrees, ccw) and mirroring (True|False) in the LaTeX coordinate system that is applied on top to any shifts to origin specified by the SymOrigin, or the origin of the component on the schematic.</dd>
   
   <dt><a name="ElemSymOrigin"></a><code>SymOrigin x1 y1 rotatedeg mirror</code></dt>
@@ -180,7 +181,7 @@ and contains the following elements:
   <dd>These are the command that produce the component in the LaTeX document. In order to position it correctly, some placeholders can be used to insert values and coordinates:
   <dl>
   
-  <dt><code>#self.texx1#</code>, <code>#self.texy1#</code></dt>
+  <dt><a name="ElemSelftexx1Selftexx2"></a><code>#self.texx1#</code>, <code>#self.texy1#</code></dt>
   <dd>Returns the x- or y-coordinate (in LaTeX space) of the component origin</dd>
   
   <dt><a name="ElemPinNamex1"></a><code>#PinName:x1#</code></dt>
