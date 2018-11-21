@@ -95,17 +95,33 @@ There are no required extra steps involved. To have good visual equivalence betw
 ### Creating an asy2tex file to translate a (new) LTspice symbol to circuitikz
 asy2tex files are the ones that store information on how to convert any symbol found in the schematic to circuiTikz code.
 To add a new symbol you need to do the following:
-1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`.
-2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension. E.g. if you copied `MyNewSymbol.asy` to `sym32a`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory.
+1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`. The relative location of the symbol file in the sym folder needs to be the same as in the LTspice sym folder. I.e., if your symbol resides in `sym\someFolder\newSymbol.asc` in your LTspice lib, you need to place it e.g. at `sym32\someFolder\newSymbol.asy`. lt2circuitikz needs the symbol to look up the pin names and positions.
+2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension in the same folder. E.g. if you copied `MyNewSymbol.asy` to `sym32a\someFolder\`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory (thus at `sym32a\someFolder\MyNewSymbol.asy2tex`).
 3. Open the asy2tex file and enter the required tokens according to the [following section](#asy2texdocu) to produce the desired circuiTikz code. Use existing conversion files as a template.
-	* To get you started, first look up the symbol in the circuiTikz manual and see whether it is a bipole, tripole or some other symbol (e.g. an opamp). Choose the Type in the asy2tex file accordingly.
+	* The general outline should be (<> mark places where you enter data):
+		```
+		Type <SymbolTypeHere>
+		TexOrigin <x y rot mirror>
+		SymOrigin <x y rot mirror>
+		BeginPinList
+		EndPinList
+		TexElementName <texElementName>
+		BeginTex
+		 <CircuiTikzCodeToCreateSymbol>
+		EndTex
+		```
+		There are also more advanced fields available, [see below](#asy2texdocu).
+	* To get you started, first look up the symbol in the circuiTikz manual and see whether it is a bipole, tripole or some other symbol (e.g. an opamp). Choose the [Type](#ElemType) in the asy2tex file accordingly.
 	* Take a look at the existing asy2tex file of the same type to get you started and with a template.
 	* Bipoles are often very straight forward: Simply replace the element name of an existing element (e.g. a resistor) and most of the time you are done. 
-	* opamp and transistor symbols often come down to positioning the circuiTikz symbol, so that the pins get positioned on the LTspice grid as transformed to the circuiTikz plane. Use the SymOrigin field to move the symbol around in the spice domain, in order to map your spice origin to the circuiTikz symbol origin. Having the origin at the center is a huge benefit for complex symbols. For most symbols, this will align the pins at the same time.
+	They usually contain the bipole element and reference the translated coordinates of the symbol pins via [#&lt;PinName&gt;:x1#](#ElemPinNamex1) and [#&lt;PinName&gt;:x1#](##ElemPinNamey1), where &lt;PinName&gt; is the name of the pin in the spice symbol.
+	* Opamp and transistor symbols often come down to positioning the circuiTikz symbol, so that the pins get positioned on the LTspice grid as transformed to the circuiTikz plane. Use the [SymOrigin](#ElemSymOrigin) field to move the symbol around in the spice domain, in order to map your spice origin to the circuiTikz symbol origin. Having the origin at the center is a huge benefit for complex symbols. For most symbols, this will align the pins at the same time.
 	* If the circuiTikz pins are not on-grid because the distance between them does not match the spice grid (in the circuiTikz plane), you need to scale the symbol. Take a look at the sym32b\latex_preamble.tex preamble file to see how scaling can be done in circuiTikz. However, it is generally advisable to use the same grid for new circuiTikz symbols as that of the existing ones, and therefore scaling should not be necessary for sym32a style conversions (see below what sym32a, sym32b means). All currently translated circuiTikz symbols have this grid pattern.
+	You might need to add short wires to connect to the "spice" pins. See the opamp symbols' `UniversalOpamp2.asy2tex` as examples. It creates a named node by using the [#self.name#](#ElemSelfName) token and thus allows a unique reference to its pins. You can also use the capability to specify relative coordinates in circuiTikz to your advantage, e.g. when positioning labels.
 4. Give the new symbol a try by using it in a schematic (*.asc) file, convert it like described previously, and compile the latex file to check the result. Adjust the asy2tex code until the result pleases you. Congratulations, you have just created your first lt2circuitikz symbol!
 
-### \*.asy2tex file documentation <a name="asy2texdocu"></a>
+<a name="asy2texdocu"></a>
+### \*.asy2tex file documentation 
 
 asy2tex files perform the conversion from *.asy symbols to LaTeX commands.
 A typical asy2tex file looks like this:
@@ -127,12 +143,12 @@ and contains the following elements:
 <dt><code>ALIASFOR ..\res.asy2tex</code></dt>
 <dd>Alias definition. Must be on the first line if present. The file will not be read any further after this line. Instead, the specified translation file will be used as if their contents were copied to this file. Useful if you want to create a new symbol (e.g. a with a defined model etc.) with the same output as an existing one.</dd>
 
-<dt><code>Type</code></dt>
+<dt><a name="ElemType"></a><code>Type</code></dt>
   <dd>Type of the symbol. Can be one of [Node|Bipole|Tripole|&lt;N&gt;pole|Graphical]. Historically, Node can also be used for Tripoles and N-Poles</dd>
   <dt><code>TexOrigin x1 y1 rotatedeg mirror</code></dt>
   <dd>Used to specify an offset (by x1, y1), rotation (in degrees, ccw) and mirroring (True|False) in the LaTeX coordinate system that is applied on top to any shifts to origin specified by the SymOrigin, or the origin of the component on the schematic.</dd>
   
-  <dt><code>SymOrigin x1 y1 rotatedeg mirror</code></dt>
+  <dt><a name="ElemSymOrigin"></a><code>SymOrigin x1 y1 rotatedeg mirror</code></dt>
   <dd>Used to specify an offset (by x1, y1), rotation (in degrees, cw) and mirroring (True|False) in the Spice schematic coordinate system that is applied on top to any shifts to origin specified by the origin of the component on the schematic</dd>
 
   <dt><code>BeginPinList</code></dt>
@@ -167,10 +183,10 @@ and contains the following elements:
   <dt><code>#self.texx1#</code>, <code>#self.texy1#</code></dt>
   <dd>Returns the x- or y-coordinate (in LaTeX space) of the component origin</dd>
   
-  <dt><code>#PinName:x1#</code></dt>
+  <dt><a name="ElemPinNamex1"></a><code>#PinName:x1#</code></dt>
   <dd>Returns the x-coordinate (in LaTeX space) of the pin named PinName (in the asy-file)</dd>
   
-  <dt><code>#PinName:y1#</code></dt>
+  <dt><a name="ElemPinNamey1"></a><code>#PinName:y1#</code></dt>
   <dd>Returns the y-coordinate (in LaTeX space) of the pin named PinName (in the asy-file)</dd>
   
   <dt><code>#PinName:junction#</code></dt>
@@ -179,7 +195,7 @@ and contains the following elements:
   <dt><code>#self.symbol.latexElementName#</code></dt>
   <dd>Returns the name specified under TexElementName</dd>
   
-   <dt><code>#self.name#</code></dt>
+  <dt><a name="ElemSelfName"></a><code>#self.name#</code></dt>
   <dd>The designator on the schematic for this component.</dd>
   
   <dt><code>#self.value#</code></dt>
