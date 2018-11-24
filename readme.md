@@ -21,8 +21,8 @@ Currently supported features:
 1. [LTSpice](http://www.linear.com/solutions/ltspice) (IV, XVII) circuit file (*.asc)
 2. [Python 3.4+](https://www.python.org/downloads/release/python-344/) or Windows system when using precompiled executable. (3.4 is currently the latest python version that works with [py2exe](www.py2exe.org/), in case you want to build your own executable).
 3. Copies of the symbol files (*.asy) of all used circuit elements in the sym32a subfolder of the script at the same relative path as they are in your LTSpice library 
-   * To use the supplied library, copy the `sym32a\circuiTikz directory` to your LTSpice library sym directory (`C:\Users\[username]\Documents\LTspiceXVII\lib\sym` on Windows with version XVII, or `[LTSpiceIVInstallDir]\lib\sym` for version IV). You don't need to copy the *.asy2tex files, but LTSpice is smart enough to ignore them if you do so. 
-   * The circuiTikz folder in your LTspice lib directory should be at `lib\circuiTikz`. Do _not_ copy the `sym32a` folder itself to lib, only its circuiTikz subdirectory! 
+   * To use the supplied library, copy the `sym32a\circuiTikz` directory to your LTSpice library sym directory (`C:\Users\[username]\Documents\LTspiceXVII\lib\sym` on Windows with version XVII, or `[LTSpiceIVInstallDir]\lib\sym` for version IV). You don't need to copy the *.asy2tex files, but LTSpice is smart enough to ignore them if you do so. 
+   * The circuiTikz folder in your LTspice lib directory should be at `lib\circuiTikz`. Do _not_ copy the `sym32a` folder itself to `lib`, only its circuiTikz subdirectory! 
    
 4. Conversion files *.asy2tex with the same name as the symbol. Symbol files and conversion files for many circuit elements are packaged with the script.
 5. LaTeX with the standalone, circuitikz, tikz, pgfplots, packages installed. The default preamble also requires amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen,ulem, but you might be able to get along without them by removing the \\usepackage lines.
