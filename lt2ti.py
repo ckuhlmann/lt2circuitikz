@@ -108,9 +108,11 @@ class lt2circuiTikz:
         try:
             approot2 = (os.path.dirname(os.path.realpath(__file__)));
             approot = os.path.dirname(os.path.abspath(__file__))
+            self.scriptmode = 'script'
         except NameError:  # We are the main py2exe script, not a module
             import sys
             approot = os.path.dirname(os.path.abspath(sys.argv[0]))
+            self.scriptmode = 'py2exe'
         
         self.scriptdir = (approot);
         
@@ -124,9 +126,11 @@ class lt2circuiTikz:
         
         if (self.config.has_option('general', 'symdir')):
             self.symfilebasepath = self.config.get('general', 'symdir') + os.sep;
+            print('lt2ti:   initial sym basepath="'+self.symfilebasepath+'"')
             
         self.config = configparser.RawConfigParser()
         conffiles = self.config.read([self.scriptdir+os.sep+'lt2ti.ini', self.scriptdir+os.sep+ self.symfilebasepath + 'sym.ini'])
+        #print('lt2ti:   config  sym basepath="' + self.config.get('general', 'symdir') + os.sep + '"')
         
         if (self.config.has_option('general', 'lt2tscale')):
             self.lt2tscale = float(self.config.get('general', 'lt2tscale'));
@@ -170,7 +174,7 @@ class lt2circuiTikz:
         try :
             fhy = open(self.scriptdir+os.sep+ relfileandpath, mode='r', newline=None);
         except Exception as e:
-            print('could not open ASY file "'+relfileandpath+'"  (cwd="'+os.curdir+'")');
+            print('could not open ASY file "'+relfileandpath+'"  (cwd="'+os.curdir+'", scriptdir="'+self.scriptdir+'", mode='+self.scriptmode+', fullpath="'+self.scriptdir+os.sep+ relfileandpath+'")');
             return None;        
         
         for line in fhy:
@@ -1109,7 +1113,7 @@ class CircuitDict:
         self.coordCompPinDict[ppint] = dictComps;        
 
     def _removeComponent_compDic(self, cmpDict, aComp):
-        res = compDict.Pop(aComp.uuid, None);
+        res = cmpDict.Pop(aComp.uuid, None);
         if res != None:
             return True;
         return False;
@@ -1131,8 +1135,8 @@ class CircuitDict:
     
     def removeComponent(self, aComp):
         success = True;
-        success = success and _removeComponent_compDic(self, self.compDict, aComp);
-        success = success and _removeComponent_coordDic(self, self.coordCompDict, aComp);
+        success = success and self._removeComponent_compDic(self, self.compDict, aComp);
+        success = success and self._removeComponent_coordDic(self, self.coordCompDict, aComp);
         # todo: remove pins
     
     def _removeWire_wireDic(self, dic, aWire):
@@ -1750,7 +1754,7 @@ class Component(SchObject):
     def addPin(self, aPin):
         self.symbol.symbolPins.addPin(aPin);
         
-    def removePin(self,pinpos):
+    def removePin(self,aPin):
         self.symbol.symbolPins.removePin(aPin);
         
     def getPinCount(self):
@@ -2320,7 +2324,7 @@ class SpatialDict:
     def getAllObjs(self):
         return list(self.objsbyid.items());
         
-    def removeObj(self, aPin):
+    def removeObj(self, aObj):
         pp = self._getPosAttrib(aObj);
         nn = self._getField(aObj, self.objnameattrib);
         ii = self._getField(aObj, self.objidattrib);

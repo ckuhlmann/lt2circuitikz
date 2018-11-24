@@ -21,7 +21,8 @@ Currently supported features:
 1. [LTSpice](http://www.linear.com/solutions/ltspice) (IV, XVII) circuit file (*.asc)
 2. [Python 3.4+](https://www.python.org/downloads/release/python-344/) or Windows system when using precompiled executable. (3.4 is currently the latest python version that works with [py2exe](www.py2exe.org/), in case you want to build your own executable).
 3. Copies of the symbol files (*.asy) of all used circuit elements in the sym32a subfolder of the script at the same relative path as they are in your LTSpice library 
-   * To use the supplied library, copy the sym32a\\circuiTikz directory to your LTSpice library sym directory (C:\\Users\\[username]\\Documents\\LTspiceXVII\\lib\\sym on Windows with version XVII, or [LTSpiceIVInstallDir]\\lib\\sym for version IV). You don't need to copy the *.asy2tex files, but LTSpice is smart enough to ignore them if you do so.
+   * To use the supplied library, copy the `sym32a\circuiTikz directory` to your LTSpice library sym directory (`C:\Users\[username]\Documents\LTspiceXVII\lib\sym` on Windows with version XVII, or `[LTSpiceIVInstallDir]\lib\sym` for version IV). You don't need to copy the *.asy2tex files, but LTSpice is smart enough to ignore them if you do so. 
+   * The circuiTikz folder in your LTspice lib directory should be at `lib\circuiTikz`. Do _not_ copy the `sym32a` folder itself to lib, only its circuiTikz subdirectory! 
    
 4. Conversion files *.asy2tex with the same name as the symbol. Symbol files and conversion files for many circuit elements are packaged with the script.
 5. LaTeX with the standalone, circuitikz, tikz, pgfplots, packages installed. The default preamble also requires amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen,ulem, but you might be able to get along without them by removing the \\usepackage lines.
@@ -37,7 +38,6 @@ or, when using the executable
 ```bash
 "D:\scriptdir\LT2circuiTikz\lt2ti.exe" "D:\testdrive\catalog.asc">run.log
 ```
-_Note: In some cases it can be necessary to have the current working directory of the command line shell at the location where lt2ti.py and the symbol folders are located. Otherwise lt2ti will not find the symbols._
 
 You will then find your converted file at D:\\testdrive\\catalog.asc.tex
 
@@ -48,7 +48,14 @@ pdflatex "D:\testdrive\catalog.asc.tex"
 
 to finally get a PDF document  D:\\testdrive\\catalog.asc.pdf with your shematic.
 
-Please not that you might want to change the extension to a simple .pdf in order to not confuse LaTeX when then using the PDF in another LaTeX document.
+Please note that you might want to change the extension to a simple .pdf in order to not confuse LaTeX when then using the PDF in another LaTeX document.
+
+## Testrun
+Use the supplied `test_lt2ti.bat` file to test your python setup with lt2ti.py on an example file. 
+
+Use `examples\compile_catalog.bat` to compile a pdf from the catalog example file to test your latex setup. 
+
+The expected outputs are present in the package (and get overwritten, so create copies if you want to compare the results. Alternatively, use git to diff for deviations).
 
 ## Scripting
 
@@ -95,7 +102,7 @@ There are no required extra steps involved. To have good visual equivalence betw
 ### Creating an asy2tex file to translate a (new) LTspice symbol to circuitikz
 asy2tex files are the ones that store information on how to convert any symbol found in the schematic to circuiTikz code.
 To add a new symbol you need to do the following:
-1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`. The relative location of the symbol file in the sym folder needs to be the same as in the LTspice sym folder. I.e., if your symbol resides in `sym\someFolder\newSymbol.asc` in your LTspice lib, you need to place it e.g. at `sym32\someFolder\newSymbol.asy`. lt2circuitikz needs the symbol to look up the pin names and positions.
+1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`. The relative location of the symbol file in the sym folder needs to be the same as in the LTspice sym folder. I.e., if your symbol resides in `sym\someFolder\newSymbol.asy` in your LTspice lib, you need to place it e.g. at `sym32\someFolder\newSymbol.asy`. lt2circuitikz needs the symbol to look up the pin names and positions.
 2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension in the same folder. E.g. if you copied `MyNewSymbol.asy` to `sym32a\someFolder\`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory (thus at `sym32a\someFolder\MyNewSymbol.asy2tex`).
 3. Open the asy2tex file and enter the required tokens according to the [following section](#asy2texdocu) to produce the desired circuiTikz code. Use existing conversion files as a template.
 	* The general outline should be (<> mark places where you enter data):
