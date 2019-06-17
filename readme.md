@@ -22,7 +22,7 @@ Currently supported features:
 2. [Python 3.4+](https://www.python.org/downloads/release/python-344/) or Windows system when using precompiled executable. (3.4 is currently the latest python version that works with [py2exe](www.py2exe.org/), in case you want to build your own executable).
 3. Copies of the symbol files (*.asy) of all used circuit elements in the sym32a subfolder of the script at the same relative path as they are in your LTSpice library 
    * To use the supplied library, copy the `sym32a\circuiTikz` directory to your LTSpice library sym directory (`C:\Users\[username]\Documents\LTspiceXVII\lib\sym` on Windows with version XVII, or `[LTSpiceIVInstallDir]\lib\sym` for version IV). You don't need to copy the *.asy2tex files, but LTSpice is smart enough to ignore them if you do so. 
-   * The circuiTikz folder in your LTspice lib directory should be at `lib\circuiTikz`. Do _not_ copy the `sym32a` folder itself to `lib`, only its circuiTikz subdirectory! 
+   * The `circuiTikz` folder in your LTspice lib directory should be at `lib\circuiTikz`. Do _not_ copy the `sym32a` folder itself to `lib`, only its `circuiTikz` subdirectory! 
    
 4. Conversion files *.asy2tex with the same name as the symbol. Symbol files and conversion files for many circuit elements are packaged with the script.
 5. LaTeX with the standalone, circuitikz, tikz, pgfplots, packages installed. The default preamble also requires amsmath, amssymb,bm,color,pgfkeys,siunitx,ifthen,ulem, but you might be able to get along without them by removing the \\usepackage lines.
@@ -92,6 +92,11 @@ This script or its author are not in any way affiliated to these companies.
 
 This script is provided as-is and without any warranty.
 
+## Customization
+
+ * You can adjust the default styles (e.g. to use american symbols) by editing the preamble files (e.g. `sym32a\latex_preamble.tex`, `sym32a\latex_closing.tex`). The file `sym32a\latex_ext.tex` is meant to be used to add additional CircuiTikZ symbols or to patch existing ones.
+ * The default Ground symbol is defined in the sym.ini file under `[general]` with the entry `default_gnd=circuiTikz\gnd`. Replace the string right to the = sign with the path and name of the .asy2tex gnd symbol file you want to use (without the extension), e.g. `circuiTikz\ground`.
+ * Further customizations are possible by editing the .asy2tex files, see the Creating new symbols section below.
 
 ## Creating new symbols
 
@@ -99,11 +104,11 @@ This script is provided as-is and without any warranty.
 Creating new symbols in LTspice works the same way as it does normally (see the _Creating New Symbols_ section in the LTspice help file). 
 There are no required extra steps involved. To have good visual equivalence between the spice circuit and the circuiTikz result, your pin spacing and proportions in your spice symbol compared to existing symbols should approximately match the ratio of the two circuiTikz symbols. To make debugging easier, you could try to position your origin at the center or at a pin, but this is not mandatory. Please consult one of the many good tutorials on how to create symbols in LTspice on how to do this. If you only use the new symbol to create circuiTikz graphics, you don't need to provide a valid spice model. If you want to be able to simulate the circuit as well, you should provide one.
 
-### Creating an asy2tex file to translate a (new) LTspice symbol to circuitikz
-asy2tex files are the ones that store information on how to convert any symbol found in the schematic to circuiTikz code.
+### Creating an asy2tex file to translate a (new) LTspice symbol to CircuiTikZ
+asy2tex files are the ones that store information on how to convert any symbol found in the schematic to circuiTikZ code.
 To add a new symbol you need to do the following:
 1. Copy the new spice symbol (asy file) for which you want to add lt2circuitikz support into the lt2circuitikz sym folder you are using, usually `sym32a`. The relative location of the symbol file in the sym folder needs to be the same as in the LTspice sym folder. I.e., if your symbol resides in `sym\someFolder\newSymbol.asy` in your LTspice lib, you need to place it e.g. at `sym32\someFolder\newSymbol.asy`. lt2circuitikz needs the symbol to look up the pin names and positions.
-2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension in the same folder. E.g. if you copied `MyNewSymbol.asy` to `sym32a\someFolder\`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory (thus at `sym32a\someFolder\MyNewSymbol.asy2tex`).
+2. Create a new asy2tex file that has the same name as the asy file, just with the asy2tex extension in the same folder. E.g. if you copied `MyNewSymbol.asy` to `sym32a\someFolder\`, you need to create a `MyNewSymbol.asy2tex` text file in the same directory (thus at `sym32a\someFolder\MyNewSymbol.asy2tex`). This is a plain ascii text file.
 3. Open the asy2tex file and enter the required tokens according to the [following section](#asy2texdocu) to produce the desired circuiTikz code. Use existing conversion files as a template.
 	* The general outline should be (<> mark places where you enter data):
 		```

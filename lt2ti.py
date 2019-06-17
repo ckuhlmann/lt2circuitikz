@@ -132,10 +132,14 @@ class lt2circuiTikz:
         conffiles = self.config.read([self.scriptdir+os.sep+'lt2ti.ini', self.scriptdir+os.sep+ self.symfilebasepath + 'sym.ini'])
         #print('lt2ti:   config  sym basepath="' + self.config.get('general', 'symdir') + os.sep + '"')
         
+        self.defaultgnd = r'circuiTikz\\gnd'
+        
         if (self.config.has_option('general', 'lt2tscale')):
             self.lt2tscale = float(self.config.get('general', 'lt2tscale'));
         if (self.config.has_option('general', 'lt2tscale_inverse')):
-            self.lt2tscale = 1.0/float(self.config.get('general', 'lt2tscale_inverse'));        
+            self.lt2tscale = 1.0/float(self.config.get('general', 'lt2tscale_inverse'));
+        if (self.config.has_option('general', 'default_gnd')):
+            self.defaultgnd = (self.config.get('general', 'default_gnd'));
         if (self.config.has_option('general', 'includepreamble')):
             includepreamble = self.config.get('general', 'includepreamble');
             self.includepreamble = ((str(includepreamble).lower() == 'true') or ((includepreamble) == '1'))
@@ -561,7 +565,8 @@ class lt2circuiTikz:
         self._resetLast(); # no more attributes for previous lines
         # FLAG <x1> <y1> <label>
         if (m.group(3) == '0'): # more a ground symbol than a net label
-            c = Component(r'circuiTikz\\gnd', int(m.group(1)), int(m.group(2)), 0, False, 'GND'+str(self.linecnt), '')
+            gndcomp = self.defaultgnd;
+            c = Component(gndcomp, int(m.group(1)), int(m.group(2)), 0, False, 'GND'+str(self.linecnt), '')
             self._handleComponent_worker(c);
         else:
             lbl = NetLabel(m.group(3), int(m.group(1)), int(m.group(2)));
