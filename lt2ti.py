@@ -890,8 +890,9 @@ class lt2circuiTikz:
                 incfiles = incfiles.split(';');
                 for incfile in incfiles:
                     srcfile = self.scriptdir+os.sep+ self.symfilebasepath + incfile;
-                    dstfile = os.path.dirname(outfile) +os.sep + os.path.basename(incfile);
+                    dstfile = os.path.dirname(os.path.abspath(outfile)) +os.sep + os.path.basename(incfile);
                     self.copyFile(srcfile, dstfile)
+                    print('    copying latexincludes: "'+srcfile+'" to "'+dstfile+'" ...')
             
             
         if (self.config.has_option('general','bipoles_length')):
