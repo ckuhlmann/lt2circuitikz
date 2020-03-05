@@ -168,9 +168,16 @@ class lt2circuiTikz:
                 
             self.lastPin = None;                
         return;
-            
+
+    def translate2ospath(self,aPath):
+        tPath = aPath.replace("\\",os.sep) # localize to OS path, since LTSpice under Wine/Windows always uses \
+        return tPath
+
     def readASYFile(self, relfileandpath):
-        print('Loading Symbol file "'+relfileandpath+'"...')
+        relfileandpath_orig = relfileandpath
+        relfileandpath = self.translate2ospath(relfileandpath_orig) # localize to OS path, since LTSpice under Wine/Windows always uses \
+
+        print('Loading Symbol file "'+relfileandpath+'" (orig="'+relfileandpath_orig+'")...')
         # read symbol file
         self.symlinecnt = 0;
         aSymbol = None;
@@ -242,14 +249,17 @@ class lt2circuiTikz:
         return aSymbol;
     
     def readASY2TexFile(self, relfileandpath, symbol):
+        relfileandpath_orig = relfileandpath
+        relfileandpath = self.translate2ospath(relfileandpath_orig)
+
         asy2texfileandpath = self.scriptdir+os.sep+ relfileandpath
         try :
             fht = open(asy2texfileandpath, mode='r', newline=None);
         except Exception as e:
-            print('Could not open requested asy2tex tile: "'+relfileandpath+'" (cwd="'+os.curdir+'")');
+            print('Could not open requested asy2tex tile: "'+relfileandpath+'" (orig="'+relfileandpath_orig+'", cwd="'+os.curdir+'")');
             return None;        
         
-        print('Processing asy2tex file: "'+relfileandpath+'" (cwd="'+os.curdir+'")');
+        print('Processing asy2tex file: "'+relfileandpath+'" (orig="'+relfileandpath_orig+'", cwd="'+os.curdir+'")');
         
         rAliasFile = re.compile(r'ALIASFOR (.*\.asy2tex)[\s]*$', flags=re.IGNORECASE);
         

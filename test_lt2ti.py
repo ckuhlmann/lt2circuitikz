@@ -1,8 +1,9 @@
 import lt2ti;
+import os;
 
 #fn = r'examples\TestTransistors.asc';
 #fn = r'examples\Test.asc';
-fn = r'examples\catalog.asc';
+fn = r'examples'+os.sep+'catalog.asc';
 #fn = r'examples\Draft2.asc'; # lines and rects
 #fn = r'examples\Draft3.asc'; # lines and rects
 #fn = r'examples\InductorEC.asc'; # lines and rects
