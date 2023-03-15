@@ -1,0 +1,20 @@
+* current noise model
+.SUBCKT noisecurrentsource Inn Inp
+.param In 1E-9
+.param In1f {In}
+.param fc 1e3
+.param trel 0
+.param kB 1.380649E-23
+*.param T 293.15
+.param T {273.15+{temp}-{trel}}
+R1 VRn1 0 {1/(4*kB*T)}
+
+B3 Inp Inn I=V(VRn1)*In
+B4 Inp Inn I=V(VRn1)*In1f Laplace=sqrt(fc*(2*pi)/s)
+
+.measure NOISE t1 AVG {temp}
+*.measure NOISE t2 PARAM T
+*.backanno
+.ENDS
+
+

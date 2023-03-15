@@ -1,0 +1,11 @@
+Type Bipole
+TexOrigin 0 0 0 False
+SymOrigin 0 0 0 False
+BeginPinList
+EndPinList
+TexElementName *nV
+BeginTex
+  \begin{scope}[circuitikz/bipoles/noise sources/fillcolor=dashed]
+    \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l_=#self.name#, a^={#self.mergedattrib.spiceline#}, ##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
+  \end{scope}
+EndTex
