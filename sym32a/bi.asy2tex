@@ -5,5 +5,5 @@ BeginPinList
 EndPinList
 TexElementName *american controlled current source
 BeginTex
-  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l_=#self.name#, a^=#self.value#,##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
+  \draw (#+:x1#, #+:y1#) to[#self.symbol.latexElementName#, l_=#self.name#, a^={#self.value#},##mirror##, #+:junction#-#-:junction#, ##options##] (#-:x1#,#-:y1#){};
 EndTex

@@ -5,7 +5,7 @@ BeginPinList
 EndPinList
 TexElementName fd op amp
 BeginTex
- \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, rotate=##rotate##, ##options##] (#self.name#) {}  (#self.name#)++(##labelmirrorx##*0.75,  ##labelmirrory##*1.25) node {#self.name# #self.value#};
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##*0.68, yscale=0.68, rotate=##rotate##, ##options##] (#self.name#) {}  (#self.name#)++(##labelmirrorx##*0.75,  ##labelmirrory##*1.25) node {#self.name# #self.value#};
  \draw (#V+:x1#,#V+:y1#) to [*short, -] (#self.name#.up);   \draw (#V-:x1#,#V-:y1#) to [*short, -] (#self.name#.down); % supply
  \draw (#In+:x1#,#In+:y1#) to [*short, -] (#self.name#.+);   \draw (#In-:x1#,#In-:y1#) to [*short, -] (#self.name#.-); \draw (#OUT+:x1#,#OUT+:y1#) to [*short, -] (#self.name#.out +); \draw (#OUT-:x1#,#OUT-:y1#) to [*short, -] (#self.name#.out -);% in/out
 EndTex

@@ -23,7 +23,7 @@ LINE Normal 15 84 28 71
 CIRCLE Normal -32 24 32 88
 WINDOW 0 24 16 Left 2
 WINDOW 39 41 57 Left 1
-SYMATTR SpiceLine En=10n En1f=En freq1byfc=1k
+SYMATTR SpiceLine En=10n En1f=En fc=1k
 SYMATTR Prefix x
 SYMATTR Description Noise Voltage
 SYMATTR ModelFile circuiTikz/noisevoltagesource.sub

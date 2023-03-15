@@ -1,13 +1,13 @@
 Type Node
 TexOrigin 0 0 0 False
-SymOrigin 0 -48 0 False
+SymOrigin 0 0 0 False
 BeginPinList
 EndPinList
 TexElementName transformer core
 BeginTex
  \xdef\indtmp{\pgfkeysvalueof{/tikz/circuitikz/inductor}} \tikzset{/lt2ti/indtmp/.initial=\indtmp} % backup
  \tikzset{/tikz/circuitikz/inductor=cute} % override
- \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, rotate=##rotate##, ##options##] (#self.name#) {}  (#self.name#)++(##labelmirrorx##*0.25,  ##labelmirrory##*0.375) node {#self.name# #self.value#};
+ \draw (#self.texx1#, #self.texy1#) node[#self.symbol.latexElementName#, xscale=##mirror_xscale_value##, rotate=##rotate##, ##options##] (#self.name#) {}  (#self.name#)++(##labelmirrorx##*1.4,  ##labelmirrory##*0.375) node {#self.name# #self.value#};
  \draw [] (#p1:x1#,#p1:y1#) to [*short, -] (#self.name#.north west);   \draw [] (#p2:x1#,#p2:y1#) to [*short, -] (#self.name#.south west);   \draw [] (#s1:x1#,#s1:y1#) to [*short, -] (#self.name#.north east);   \draw [] (#s2:x1#,#s2:y1#) to [*short, -] (#self.name#.south east); % in/out   %\node [orange] at (#self.name#.center) {x};
  \tikzset{/tikz/circuitikz/inductor=\pgfkeysvalueof{/lt2ti/indtmp}} % restore
 EndTex

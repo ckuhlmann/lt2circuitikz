@@ -1,6 +1,6 @@
 Type Node
 TexOrigin 0 0 0 False
-SymOrigin 0 -48 0 False
+SymOrigin 0 0 0 False
 BeginPinList
 EndPinList
 TexElementName gyrator
